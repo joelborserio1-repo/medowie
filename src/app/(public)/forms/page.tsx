@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/site/PageHero";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatDate } from "@/lib/format";
+import { mediaUrl } from "@/lib/cms/media";
 import { getDocumentsByCategory } from "@/lib/data/documents";
 import { getSiteSettings } from "@/lib/data/settings";
-import type { DocumentCategory, DocumentRecord } from "@/lib/supabase/types";
+import type { DocumentCategory, FormDocument } from "@/lib/cms/types";
 
 export const metadata: Metadata = {
   title: "Forms & Contracts",
@@ -18,12 +19,12 @@ export default async function FormsPage() {
     getSiteSettings().catch(() => null),
   ]);
 
-  const categories = grouped ? (Object.entries(grouped) as [DocumentCategory, DocumentRecord[]][]) : [];
+  const categories = grouped ? (Object.entries(grouped) as [DocumentCategory, FormDocument[]][]) : [];
   const hasAny = categories.some(([, docs]) => docs.length > 0);
 
   const collectionInfo = [
-    settings?.collection_days ? { label: "Collection Days", value: settings.collection_days } : null,
-    settings?.collection_cutoff_time ? { label: "Order Cut-Off", value: settings.collection_cutoff_time } : null,
+    settings?.collectionDays ? { label: "Collection Days", value: settings.collectionDays } : null,
+    settings?.collectionCutoffTime ? { label: "Order Cut-Off", value: settings.collectionCutoffTime } : null,
   ].filter((c): c is { label: string; value: string } => Boolean(c));
 
   return (
@@ -53,13 +54,13 @@ export default async function FormsPage() {
                           <div>
                             <p className="text-sm font-semibold text-charcoal">{doc.title}</p>
                             <p className="mt-0.5 text-xs text-grey">
-                              {[doc.season, doc.description, doc.updated_at ? `Updated ${formatDate(doc.updated_at)}` : null]
+                              {[doc.season, doc.description, doc.updatedAt ? `Updated ${formatDate(doc.updatedAt)}` : null]
                                 .filter(Boolean)
                                 .join(" · ")}
                             </p>
                           </div>
                           <a
-                            href={doc.file_url}
+                            href={mediaUrl(doc.file)!}
                             className="text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline"
                           >
                             Download →
@@ -87,8 +88,8 @@ export default async function FormsPage() {
                 </div>
               ))}
             </dl>
-            {settings?.collection_instructions && (
-              <p className="mt-6 max-w-2xl text-sm leading-relaxed text-grey">{settings.collection_instructions}</p>
+            {settings?.collectionInstructions && (
+              <p className="mt-6 max-w-2xl text-sm leading-relaxed text-grey">{settings.collectionInstructions}</p>
             )}
           </div>
         </section>

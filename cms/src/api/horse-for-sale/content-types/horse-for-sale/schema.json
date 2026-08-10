@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "horses_for_sale",
+  "info": {
+    "singularName": "horse-for-sale",
+    "pluralName": "horses-for-sale",
+    "displayName": "Horse for Sale",
+    "description": "Current listings and archived/sold and yearling-sale records."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "name", "required": true },
+    "state": {
+      "type": "enumeration",
+      "enum": ["available", "under_offer", "sold", "upcoming", "archive"],
+      "default": "available",
+      "required": true
+    },
+    "featured": { "type": "boolean", "default": false },
+    "saleType": {
+      "type": "enumeration",
+      "enum": ["Private Sale", "Yearling Sale", "Shares", "Broodmare", "Racehorse", "Weanling", "Other"],
+      "default": "Private Sale",
+      "required": true
+    },
+
+    "yearFoaled": { "type": "integer" },
+    "sex": { "type": "string" },
+    "colour": { "type": "string" },
+    "gait": { "type": "enumeration", "enum": ["Pacer", "Trotter"] },
+
+    "sire": { "type": "string" },
+    "dam": { "type": "string" },
+    "damsire": { "type": "string" },
+
+    "price": { "type": "decimal" },
+    "priceType": { "type": "enumeration", "enum": ["fixed", "poa", "shares"], "default": "poa" },
+
+    "description": { "type": "text" },
+    "location": { "type": "string" },
+
+    "heroImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "gallery": { "type": "media", "multiple": true, "allowedTypes": ["images"] },
+    "pedigreeDocument": { "type": "media", "multiple": false, "allowedTypes": ["files"] },
+    "videoUrl": { "type": "string" },
+    "externalCatalogueUrl": { "type": "string" },
+
+    "saleName": { "type": "string" },
+    "saleDate": { "type": "date" },
+    "lotNumber": { "type": "string" },
+    "soldPrice": { "type": "decimal" },
+    "showSoldPrice": { "type": "boolean", "default": false },
+
+    "displayOrder": { "type": "integer", "default": 0 },
+
+    "newsArticles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::news-article.news-article",
+      "mappedBy": "relatedHorse"
+    }
+  }
+}

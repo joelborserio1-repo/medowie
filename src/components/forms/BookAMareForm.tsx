@@ -6,11 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { bookAMareSchema, type EnquiryInput } from "@/lib/validation/enquiry";
 import { TextField, TextAreaField, SelectField } from "@/components/forms/fields";
 import { useEnquirySubmit } from "@/components/forms/useEnquirySubmit";
-import type { Stallion } from "@/lib/supabase/types";
+import type { Stallion } from "@/lib/cms/types";
 
 type FormValues = Omit<Extract<EnquiryInput, { type: "book_a_mare" }>, "type">;
 
-export function BookAMareForm({ stallions }: { stallions: Pick<Stallion, "id" | "slug" | "name" | "country_suffix">[] }) {
+export function BookAMareForm({ stallions }: { stallions: Pick<Stallion, "id" | "slug" | "name" | "countrySuffix">[] }) {
   const searchParams = useSearchParams();
   const preselected = stallions.find((s) => s.slug === searchParams.get("stallion"));
   const { status, error, submit } = useEnquirySubmit();
@@ -21,7 +21,7 @@ export function BookAMareForm({ stallions }: { stallions: Pick<Stallion, "id" | 
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(bookAMareSchema.omit({ type: true })),
-    defaultValues: { stallionId: preselected?.id, country: "Australia" },
+    defaultValues: { stallionId: preselected ? String(preselected.id) : undefined, country: "Australia" },
   });
 
   if (status === "success") {
@@ -47,7 +47,7 @@ export function BookAMareForm({ stallions }: { stallions: Pick<Stallion, "id" | 
           {stallions.map((s) => (
             <option key={s.id} value={s.id}>
               {s.name}
-              {s.country_suffix ? ` ${s.country_suffix}` : ""}
+              {s.countrySuffix ? ` ${s.countrySuffix}` : ""}
             </option>
           ))}
         </SelectField>

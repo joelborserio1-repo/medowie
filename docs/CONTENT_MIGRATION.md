@@ -17,7 +17,11 @@ they were read directly, not guessed. No image files could be extracted from the
 inline in the conversation, not files on disk), so **no photography was migrated**. Per the project brief,
 none was fabricated or AI-generated as a substitute.
 
-## What is verified and seeded (`supabase/migrations/0003_seed.sql`)
+The CMS itself was later rebuilt on Strapi (see `cms/`); the verified content below is seeded by
+`cms/src/bootstrap/seed-content.ts`, which runs automatically on Strapi's first boot and is safe to
+re-run (it skips anything already present, so it never overwrites staff-entered data).
+
+## What is verified and seeded (`cms/src/bootstrap/seed-content.ts`)
 
 - **Business details**: address (951 Richardson Road, Medowie NSW 2318), phone (0429 817 199), email
   (medowielodge@bigpond.com), Facebook page.
@@ -34,35 +38,35 @@ none was fabricated or AI-generated as a substitute.
 
 ## What is deliberately left blank
 
-Everything the source material didn't verify ships as a `NULL` field or an `admin_review` /
-`draft` status, never a guess:
+Everything the source material didn't verify ships as an empty field or an `admin_review` / `draft`
+state, never a guess:
 
 - Stallion **service fees**, **GST notes**, **statistics** (mile rate, earnings, starts/wins),
   **full biographies**, **pedigree trees beyond sire/dam**, **progeny**, **career highlights**.
 - Whether each of the five stallions is **currently standing** — the source page's own "2023/2024
   breeding season" label and "© 2015–2025" footer show the live site is already out of date, so
-  season-status cannot be treated as current. All five are seeded as `admin_review`.
+  season-status cannot be treated as current. All five are seeded with `state: admin_review`.
 - All **photography** — stallion, training, yearling and property images. `BrandImage` renders a plain
-  brand-toned placeholder panel (never AI-generated art) wherever `image_url` is null.
+  brand-toned placeholder panel (never AI-generated art) wherever a media field is empty.
 - Training/About/Yearling Preparation **sub-sections** the brief asked for (Race Training,
   Breaking-In, Facilities, Sale Preparation, Handling & Education, Presentation, Breeding, region copy)
-  — the live site didn't contain this detail, so the `site_content_blocks` rows exist with a heading
-  but no body, and are seeded as `draft` (hidden from the public page) rather than filled with generic
-  marketing copy.
+  — the live site didn't contain this detail, so those fields on the relevant single types (Training
+  Page, About Page, Yearling Preparation Page) are left blank rather than filled with generic marketing
+  copy; the frontend simply doesn't render an empty section.
 - **Forms & contracts**, **results**, **news**, **current horses for sale** — no source data existed at
-  all, so these tables start empty and their pages render an honest empty state.
+  all, so these content types start empty and their pages render an honest empty state.
 
 ## What Medowie Lodge staff need to do
 
-1. **Confirm the current stallion roster and season** in **Admin → Stallions** — set each stallion's
-   status to `Published` (or `Archived`) once fees and availability are confirmed for the season, or
-   remove the ones no longer standing.
-2. **Upload real photography** via **Admin → Media**, then paste the resulting URLs into each
-   stallion/horse/page's image fields.
+1. **Confirm the current stallion roster and season** in Strapi admin (Content Manager → Stallion) —
+   set each stallion's **State** to `published` (or `archived`) once fees and availability are confirmed
+   for the season, or remove the ones no longer standing.
+2. **Upload real photography** via each stallion/horse/article's media fields (opens the Media Library
+   picker directly — no separate upload step needed).
 3. **Fill in service fees, statistics, biographies and pedigrees** per stallion.
-4. **Write the expanded Training / Yearling Preparation / About sections** via **Admin → Site Content**
-   — each is a plain heading + rich-text body, published individually.
-5. **Upload current contracts and semen order forms** via **Admin → Forms & Contracts**.
+4. **Write the expanded Training / Yearling Preparation / About sections** — each is a single type with
+   one field per section; leave a field blank to keep that section hidden.
+5. **Upload current contracts and semen order forms** via the Form Document content type.
 6. If network access to the old site is restored later, or an export of it becomes available, re-run a
-   proper crawl and reconcile it against what's already in the CMS rather than overwriting
-   staff-entered data.
+   proper crawl and reconcile it against what's already in Strapi rather than overwriting staff-entered
+   data.

@@ -1,23 +1,24 @@
 import Link from "next/link";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { formatFee, stallionDisplayName } from "@/lib/format";
-import type { Stallion } from "@/lib/supabase/types";
+import { mediaUrl } from "@/lib/cms/media";
+import type { Stallion } from "@/lib/cms/types";
 
 export function StallionCard({ stallion }: { stallion: Stallion }) {
-  const fee = formatFee(stallion.service_fee, stallion.includes_gst);
+  const fee = formatFee(stallion.serviceFee, stallion.includesGst);
   const pedigree = [stallion.sire, stallion.dam].filter(Boolean).join(" x ");
 
   const semen: string[] = [];
-  if (stallion.semen_chilled_au) semen.push("Chilled Australia");
-  if (stallion.semen_frozen_au) semen.push("Frozen Australia");
-  if (stallion.semen_frozen_nz) semen.push("Frozen New Zealand");
+  if (stallion.semenChilledAu) semen.push("Chilled Australia");
+  if (stallion.semenFrozenAu) semen.push("Frozen Australia");
+  if (stallion.semenFrozenNz) semen.push("Frozen New Zealand");
 
   return (
     <Link href={`/stallions/${stallion.slug}`} className="group block border border-line bg-warm-white">
       <div className="relative aspect-[4/3] overflow-hidden">
         <BrandImage
-          src={stallion.card_image_url ?? stallion.profile_image_url}
-          alt={stallionDisplayName(stallion.name, stallion.country_suffix)}
+          src={mediaUrl(stallion.cardImage) ?? mediaUrl(stallion.profileImage)}
+          alt={stallionDisplayName(stallion.name, stallion.countrySuffix)}
           label={stallion.name}
           sizes="(min-width: 1024px) 33vw, 100vw"
           className="transition-transform duration-300 group-hover:scale-[1.03]"
@@ -32,8 +33,8 @@ export function StallionCard({ stallion }: { stallion: Stallion }) {
       <div className="p-5">
         <h3 className="font-serif text-xl text-brown">
           {stallion.name}
-          {stallion.country_suffix && (
-            <span className="ml-1.5 text-sm font-normal text-earth">{stallion.country_suffix}</span>
+          {stallion.countrySuffix && (
+            <span className="ml-1.5 text-sm font-normal text-earth">{stallion.countrySuffix}</span>
           )}
         </h3>
         {pedigree && (

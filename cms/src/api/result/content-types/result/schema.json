@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "results",
+  "info": {
+    "singularName": "result",
+    "pluralName": "results",
+    "displayName": "Result",
+    "description": "Race results for the homepage/results page track record."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "date": { "type": "date", "required": true },
+    "horse": { "type": "string", "required": true },
+    "race": { "type": "string" },
+    "track": { "type": "string" },
+    "placing": { "type": "string" },
+    "trainer": { "type": "string" },
+    "driver": { "type": "string" },
+    "time": { "type": "string" },
+    "description": { "type": "text" },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "externalUrl": { "type": "string" },
+    "state": { "type": "enumeration", "enum": ["draft", "published"], "default": "published", "required": true },
+    "displayOrder": { "type": "integer", "default": 0 }
+  }
+}

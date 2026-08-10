@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The Strapi CMS is a separate app with its own toolchain — see cms/.
+    "cms/**",
+    ".open-next/**",
   ]),
 ]);
 

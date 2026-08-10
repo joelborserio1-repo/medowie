@@ -2,7 +2,7 @@ import Image from "next/image";
 import { clsx } from "clsx";
 
 /**
- * Renders a Supabase-hosted photo, or — when none has been uploaded yet — a
+ * Renders a Strapi-hosted photo, or — when none has been uploaded yet — a
  * plain brand-toned panel with the subject's name. No stock or AI imagery.
  */
 export function BrandImage({

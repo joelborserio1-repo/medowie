@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "enquiry_notes",
+  "info": {
+    "singularName": "enquiry-note",
+    "pluralName": "enquiry-notes",
+    "displayName": "Enquiry Note",
+    "description": "Internal, timestamped staff notes attached to an enquiry."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "note": { "type": "text", "required": true },
+    "enquiry": { "type": "relation", "relation": "manyToOne", "target": "api::enquiry.enquiry", "inversedBy": "notes" }
+  }
+}

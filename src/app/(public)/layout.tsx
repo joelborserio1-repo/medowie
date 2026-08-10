@@ -3,16 +3,18 @@ import { cormorant, inter } from "@/lib/fonts";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { getSiteSettings } from "@/lib/data/settings";
+import { mediaUrl } from "@/lib/cms/media";
 import "../globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.medowielodge.com.au";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings().catch(() => null);
-  const title = settings?.seo_default_title ?? "Medowie Lodge — Standardbred Stud & Harness Racing Stables";
+  const title = settings?.seoDefaultTitle ?? "Medowie Lodge — Standardbred Stud & Harness Racing Stables";
   const description =
-    settings?.seo_default_description ??
+    settings?.seoDefaultDescription ??
     "Medowie Lodge is a Standardbred stud and harness racing stable at Medowie, NSW.";
+  const ogImage = mediaUrl(settings?.ogImage);
 
   return {
     metadataBase: new URL(siteUrl),
@@ -25,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Medowie Lodge",
       locale: "en_AU",
       type: "website",
-      images: settings?.og_image_url ? [settings.og_image_url] : undefined,
+      images: ogImage ? [ogImage] : undefined,
     },
     twitter: {
       card: "summary_large_image",
@@ -42,20 +44,20 @@ export default async function PublicLayout({ children }: { children: React.React
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: settings?.business_name ?? "Medowie Lodge",
-    description: settings?.seo_default_description,
+    name: settings?.businessName ?? "Medowie Lodge",
+    description: settings?.seoDefaultDescription,
     telephone: settings?.phone,
     email: settings?.email,
     address: {
       "@type": "PostalAddress",
-      streetAddress: settings?.address_line1,
+      streetAddress: settings?.addressLine1,
       addressLocality: settings?.suburb,
       addressRegion: settings?.state,
       postalCode: settings?.postcode,
       addressCountry: "AU",
     },
     url: siteUrl,
-    sameAs: settings?.facebook_url ? [settings.facebook_url] : undefined,
+    sameAs: settings?.facebookUrl ? [settings.facebookUrl] : undefined,
   };
 
   return (

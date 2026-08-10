@@ -1,6 +1,6 @@
 import { BrandImage } from "@/components/ui/BrandImage";
 import { Button } from "@/components/ui/Button";
-import type { SiteSettings } from "@/lib/supabase/types";
+import type { SiteSettings } from "@/lib/cms/types";
 
 export function ContactCta({ settings }: { settings: SiteSettings | null }) {
   return (

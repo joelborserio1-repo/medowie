@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_stallion_videos",
+  "info": {
+    "displayName": "Video",
+    "icon": "play"
+  },
+  "options": {},
+  "attributes": {
+    "title": { "type": "string" },
+    "youtubeUrl": { "type": "string", "required": true }
+  }
+}

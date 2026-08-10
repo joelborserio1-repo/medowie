@@ -1,34 +1,27 @@
-import { createClient } from "@/lib/supabase/server";
-import type { NewsArticle } from "@/lib/supabase/types";
+import { strapiFind } from "@/lib/cms/client";
+import type { NewsArticle } from "@/lib/cms/types";
 
 export async function getLatestNews(limit = 3): Promise<NewsArticle[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("news")
-    .select("*")
-    .eq("status", "published")
-    .order("published_date", { ascending: false })
-    .limit(limit);
-
-  if (error) throw error;
-  return data ?? [];
+  return strapiFind<NewsArticle>("/news-articles", {
+    filters: { state: { $eq: "published" } },
+    sort: ["publishedDate:desc"],
+    pagination: { limit },
+    populate: "*",
+  });
 }
 
 export async function getAllNews(): Promise<NewsArticle[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("news")
-    .select("*")
-    .eq("status", "published")
-    .order("published_date", { ascending: false });
-
-  if (error) throw error;
-  return data ?? [];
+  return strapiFind<NewsArticle>("/news-articles", {
+    filters: { state: { $eq: "published" } },
+    sort: ["publishedDate:desc"],
+    populate: "*",
+  });
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsArticle | null> {
-  const supabase = await createClient();
-  const { data, error } = await supabase.from("news").select("*").eq("slug", slug).maybeSingle();
-  if (error) throw error;
-  return data;
+  const results = await strapiFind<NewsArticle>("/news-articles", {
+    filters: { slug: { $eq: slug } },
+    populate: "*",
+  });
+  return results[0] ?? null;
 }

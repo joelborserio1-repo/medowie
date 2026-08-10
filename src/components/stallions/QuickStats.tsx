@@ -1,10 +1,10 @@
 import { formatCurrency } from "@/lib/format";
-import type { Stallion } from "@/lib/supabase/types";
+import type { Stallion } from "@/lib/cms/types";
 
 export function QuickStats({ stallion }: { stallion: Stallion }) {
   const stats = [
-    stallion.mile_rate ? { label: "Mile Rate", value: stallion.mile_rate } : null,
-    stallion.career_earnings ? { label: "Career Earnings", value: formatCurrency(stallion.career_earnings) } : null,
+    stallion.mileRate ? { label: "Mile Rate", value: stallion.mileRate } : null,
+    stallion.careerEarnings ? { label: "Career Earnings", value: formatCurrency(stallion.careerEarnings) } : null,
     stallion.wins !== null ? { label: "Wins", value: String(stallion.wins) } : null,
     stallion.starts !== null ? { label: "Starts", value: String(stallion.starts) } : null,
     stallion.seconds !== null ? { label: "Seconds", value: String(stallion.seconds) } : null,

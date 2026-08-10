@@ -3,8 +3,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { ContentSection } from "@/components/site/ContentSection";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { TrainingEnquiryForm } from "@/components/forms/TrainingEnquiryForm";
-import { getContentBlocks } from "@/lib/data/settings";
-import type { SiteContentBlock } from "@/lib/supabase/types";
+import { getTrainingPage } from "@/lib/data/settings";
 
 export const metadata: Metadata = {
   title: "Training",
@@ -12,10 +11,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/training" },
 };
 
-const KEYS = ["training_intro", "training_race_training", "training_breaking_in", "training_education", "training_facilities"];
-
 export default async function TrainingPage() {
-  const blocks = await getContentBlocks(KEYS).catch(() => ({}) as Record<string, SiteContentBlock>);
+  const page = await getTrainingPage().catch(() => null);
 
   return (
     <div>
@@ -25,23 +22,23 @@ export default async function TrainingPage() {
         intro="Race training, breaking-in and preparation from Medowie, NSW."
       />
 
-      {blocks.training_intro && (
+      {page?.introBody && (
         <section className="border-b border-line py-14">
           <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
             <div className="relative aspect-[4/3]">
               <BrandImage src={null} alt="Training at Medowie Lodge" label="Training" />
             </div>
             <div className="max-w-lg whitespace-pre-line text-[16px] leading-relaxed text-charcoal">
-              {blocks.training_intro.body}
+              {page.introBody}
             </div>
           </div>
         </section>
       )}
 
-      <ContentSection block={blocks.training_race_training} eyebrow="Race Training" />
-      <ContentSection block={blocks.training_breaking_in} eyebrow="Breaking-In" />
-      <ContentSection block={blocks.training_education} eyebrow="Education & Preparation" />
-      <ContentSection block={blocks.training_facilities} eyebrow="Facilities" />
+      <ContentSection heading={page?.raceTrainingHeading} body={page?.raceTrainingBody} eyebrow="Race Training" />
+      <ContentSection heading={page?.breakingInHeading} body={page?.breakingInBody} eyebrow="Breaking-In" />
+      <ContentSection heading={page?.educationHeading} body={page?.educationBody} eyebrow="Education & Preparation" />
+      <ContentSection heading={page?.facilitiesHeading} body={page?.facilitiesBody} eyebrow="Facilities" />
 
       <section className="py-14">
         <div className="mx-auto w-full max-w-2xl px-5 sm:px-8">

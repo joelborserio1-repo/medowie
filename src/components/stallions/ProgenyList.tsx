@@ -1,6 +1,7 @@
 import { BrandImage } from "@/components/ui/BrandImage";
 import { formatCurrency } from "@/lib/format";
-import type { StallionProgeny } from "@/lib/supabase/types";
+import { mediaUrl } from "@/lib/cms/media";
+import type { StallionProgeny } from "@/lib/cms/types";
 
 export function ProgenyList({ progeny }: { progeny: StallionProgeny[] }) {
   if (progeny.length === 0) return null;
@@ -18,17 +19,17 @@ export function ProgenyList({ progeny }: { progeny: StallionProgeny[] }) {
           {list.map((p) => (
             <div key={p.id} className="border border-line">
               <div className="relative aspect-square">
-                <BrandImage src={p.image_url} alt={p.name} label={p.name} />
+                <BrandImage src={mediaUrl(p.image)} alt={p.name} label={p.name} />
               </div>
               <div className="p-4">
                 <p className="font-serif text-lg text-brown">{p.name}</p>
                 <p className="mt-1 text-xs text-grey">
-                  {[p.sex, p.foaled_year ? String(p.foaled_year) : null].filter(Boolean).join(" · ")}
+                  {[p.sex, p.foaledYear ? String(p.foaledYear) : null].filter(Boolean).join(" · ")}
                 </p>
                 {p.dam && <p className="mt-1 text-xs text-grey">Dam: {p.dam}</p>}
-                {(p.earnings || p.wins || p.mile_rate) && (
+                {(p.earnings || p.wins || p.mileRate) && (
                   <p className="mt-2 text-xs font-semibold text-charcoal">
-                    {[p.wins ? `${p.wins} wins` : null, p.mile_rate, formatCurrency(p.earnings)]
+                    {[p.wins ? `${p.wins} wins` : null, p.mileRate, formatCurrency(p.earnings)]
                       .filter(Boolean)
                       .join(" · ")}
                   </p>

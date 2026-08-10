@@ -1,0 +1,37 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "medowie-lodge",
+	"compatibility_date": "2026-08-01",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"services": [
+		{
+			// Self-reference service binding, the service name must match the worker name
+			// see https://opennext.js.org/cloudflare/caching
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "medowie-lodge"
+		}
+	],
+	"r2_buckets": [
+		// Incremental Static Regeneration cache for Next.js pages/fetches.
+		// Create with: npx wrangler r2 bucket create medowie-lodge-opennext-cache
+		{
+			"binding": "NEXT_INC_CACHE_R2_BUCKET",
+			"bucket_name": "medowie-lodge-opennext-cache"
+		}
+	],
+	"images": {
+		// next/image optimization on Cloudflare's Images service.
+		"binding": "IMAGES"
+	},
+	"vars": {
+		// Non-secret runtime vars. Secrets (STRAPI API token, RESEND_API_KEY)
+		// are set with `wrangler secret put <NAME>` instead — see
+		// docs/DEPLOYMENT.md.
+		"NEXT_PUBLIC_SITE_URL": "https://www.medowielodge.com.au"
+	}
+}

@@ -3,7 +3,13 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
+      // Local Strapi dev server.
+      { protocol: "http", hostname: "localhost", port: "1337" },
+      // Strapi on Railway.
+      { protocol: "https", hostname: "*.up.railway.app" },
+      // Cloudflare R2 media (if the Strapi upload provider is switched to R2 — see docs/DEPLOYMENT.md).
+      { protocol: "https", hostname: "*.r2.dev" },
+      { protocol: "https", hostname: "*.r2.cloudflarestorage.com" },
     ],
   },
   async redirects() {

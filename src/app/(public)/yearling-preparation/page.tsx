@@ -3,9 +3,8 @@ import { PageHero } from "@/components/site/PageHero";
 import { ContentSection } from "@/components/site/ContentSection";
 import { PastYearlingsGallery } from "@/components/site/PastYearlingsGallery";
 import { BrandImage } from "@/components/ui/BrandImage";
-import { getContentBlocks } from "@/lib/data/settings";
+import { getYearlingPreparationPage } from "@/lib/data/settings";
 import { getArchivedHorses } from "@/lib/data/horses";
-import type { SiteContentBlock } from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
   title: "Yearling Preparation",
@@ -13,20 +12,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/yearling-preparation" },
 };
 
-const KEYS = [
-  "yearling_preparation_intro",
-  "yearling_sale_preparation",
-  "yearling_handling_education",
-  "yearling_presentation",
-];
-
 export default async function YearlingPreparationPage() {
-  const [blocks, archivedHorses] = await Promise.all([
-    getContentBlocks(KEYS).catch(() => ({}) as Record<string, SiteContentBlock>),
+  const [page, archivedHorses] = await Promise.all([
+    getYearlingPreparationPage().catch(() => null),
     getArchivedHorses().catch(() => []),
   ]);
 
-  const yearlings = archivedHorses.filter((h) => h.sale_type === "Yearling Sale");
+  const yearlings = archivedHorses.filter((h) => h.saleType === "Yearling Sale");
 
   return (
     <div>
@@ -36,11 +28,11 @@ export default async function YearlingPreparationPage() {
         intro="Preparing and presenting Standardbred yearlings for sale."
       />
 
-      {blocks.yearling_preparation_intro && (
+      {page?.introBody && (
         <section className="border-b border-line py-14">
           <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
             <div className="max-w-lg whitespace-pre-line text-[16px] leading-relaxed text-charcoal">
-              {blocks.yearling_preparation_intro.body}
+              {page.introBody}
             </div>
             <div className="relative aspect-[4/3]">
               <BrandImage src={null} alt="Yearling preparation at Medowie Lodge" label="Yearling Preparation" />
@@ -49,9 +41,13 @@ export default async function YearlingPreparationPage() {
         </section>
       )}
 
-      <ContentSection block={blocks.yearling_sale_preparation} eyebrow="Sale Preparation" />
-      <ContentSection block={blocks.yearling_handling_education} eyebrow="Handling & Education" />
-      <ContentSection block={blocks.yearling_presentation} eyebrow="Presentation" />
+      <ContentSection heading={page?.salePreparationHeading} body={page?.salePreparationBody} eyebrow="Sale Preparation" />
+      <ContentSection
+        heading={page?.handlingEducationHeading}
+        body={page?.handlingEducationBody}
+        eyebrow="Handling & Education"
+      />
+      <ContentSection heading={page?.presentationHeading} body={page?.presentationBody} eyebrow="Presentation" />
 
       <section className="py-14">
         <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">

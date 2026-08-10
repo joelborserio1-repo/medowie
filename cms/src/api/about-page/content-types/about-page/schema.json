@@ -1,0 +1,25 @@
+{
+  "kind": "singleType",
+  "collectionName": "about_page",
+  "info": {
+    "singularName": "about-page",
+    "pluralName": "about-pages",
+    "displayName": "About Page",
+    "description": "Editable copy for the About page sections."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "introBody": { "type": "text" },
+    "darrenHeading": { "type": "string", "default": "Darren Reay & Family" },
+    "darrenBody": { "type": "text" },
+    "breedingHeading": { "type": "string", "default": "Breeding" },
+    "breedingBody": { "type": "text" },
+    "trainingHeading": { "type": "string", "default": "Training" },
+    "trainingBody": { "type": "text" },
+    "regionHeading": { "type": "string", "default": "Medowie / Hunter Region" },
+    "regionBody": { "type": "text" }
+  }
+}

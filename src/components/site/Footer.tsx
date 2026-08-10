@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSiteSettings, getContentBlock } from "@/lib/data/settings";
+import { getSiteSettings } from "@/lib/data/settings";
 
 const FOOTER_LINKS = [
   { label: "Stallions", href: "/stallions" },
@@ -11,10 +11,7 @@ const FOOTER_LINKS = [
 ];
 
 export async function Footer() {
-  const [settings, note] = await Promise.all([
-    getSiteSettings().catch(() => null),
-    getContentBlock("footer_note").catch(() => null),
-  ]);
+  const settings = await getSiteSettings().catch(() => null);
 
   const year = new Date().getFullYear();
 
@@ -53,10 +50,10 @@ export async function Footer() {
               </a>
             </p>
           )}
-          {settings?.facebook_url && (
+          {settings?.facebookUrl && (
             <p className="mt-4">
               <a
-                href={settings.facebook_url}
+                href={settings.facebookUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-orange"
@@ -71,7 +68,7 @@ export async function Footer() {
       <div className="border-t border-warm-white/15">
         <div className="mx-auto w-full max-w-[1400px] px-5 py-5 text-xs leading-relaxed text-warm-white/60 sm:px-8">
           <p>© {year} Medowie Lodge.</p>
-          <p>{note?.body ?? "Website information subject to change. Service fees and availability should be confirmed directly with Medowie Lodge."}</p>
+          <p>Website information subject to change. Service fees and availability should be confirmed directly with Medowie Lodge.</p>
         </div>
       </div>
     </footer>

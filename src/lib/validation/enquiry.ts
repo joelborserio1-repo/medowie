@@ -17,7 +17,7 @@ export const generalEnquirySchema = z.object({
 export const stallionEnquirySchema = z.object({
   type: z.literal("stallion"),
   ...base,
-  stallionId: z.string().uuid().optional(),
+  stallionId: z.string().optional(),
   mareName: z.string().optional(),
   mareSire: z.string().optional(),
   state: z.string().optional(),
@@ -26,7 +26,7 @@ export const stallionEnquirySchema = z.object({
 export const bookAMareSchema = z.object({
   type: z.literal("book_a_mare"),
   ...base,
-  stallionId: z.string().uuid({ message: "Select a stallion" }),
+  stallionId: z.string().min(1, { message: "Select a stallion" }),
   mareName: z.string().min(1, "Mare name is required"),
   mareAge: z.string().optional(),
   mareSire: z.string().optional(),
@@ -55,7 +55,7 @@ export const trainingEnquirySchema = z.object({
 export const horseForSaleEnquirySchema = z.object({
   type: z.literal("horse_for_sale"),
   ...base,
-  horseId: z.string().uuid().optional(),
+  horseId: z.string().optional(),
 });
 
 export const enquirySchema = z.discriminatedUnion("type", [

@@ -1,0 +1,25 @@
+{
+  "kind": "singleType",
+  "collectionName": "training_page",
+  "info": {
+    "singularName": "training-page",
+    "pluralName": "training-pages",
+    "displayName": "Training Page",
+    "description": "Editable copy for the Training page sections."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "introBody": { "type": "text" },
+    "raceTrainingHeading": { "type": "string", "default": "Race Training" },
+    "raceTrainingBody": { "type": "text" },
+    "breakingInHeading": { "type": "string", "default": "Breaking-In" },
+    "breakingInBody": { "type": "text" },
+    "educationHeading": { "type": "string", "default": "Education & Preparation" },
+    "educationBody": { "type": "text" },
+    "facilitiesHeading": { "type": "string", "default": "Facilities" },
+    "facilitiesBody": { "type": "text" }
+  }
+}

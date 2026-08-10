@@ -1,21 +1,17 @@
-import { createClient } from "@/lib/supabase/server";
-import type { DocumentCategory, DocumentRecord } from "@/lib/supabase/types";
+import { strapiFind } from "@/lib/cms/client";
+import type { DocumentCategory, FormDocument } from "@/lib/cms/types";
 
-export async function getActiveDocuments(): Promise<DocumentRecord[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("documents")
-    .select("*")
-    .eq("active", true)
-    .order("display_order", { ascending: true });
-
-  if (error) throw error;
-  return data ?? [];
+export async function getActiveDocuments(): Promise<FormDocument[]> {
+  return strapiFind<FormDocument>("/form-documents", {
+    filters: { active: { $eq: true } },
+    sort: ["displayOrder:asc"],
+    populate: "*",
+  });
 }
 
-export async function getDocumentsByCategory(): Promise<Record<DocumentCategory, DocumentRecord[]>> {
+export async function getDocumentsByCategory(): Promise<Record<DocumentCategory, FormDocument[]>> {
   const documents = await getActiveDocuments();
-  const grouped: Record<DocumentCategory, DocumentRecord[]> = {
+  const grouped: Record<DocumentCategory, FormDocument[]> = {
     "Stallion Service Contracts": [],
     "Semen Order Forms": [],
     "Breeding Information": [],

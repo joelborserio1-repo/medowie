@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { formatDate } from "@/lib/format";
-import type { NewsArticle } from "@/lib/supabase/types";
+import { mediaUrl } from "@/lib/cms/media";
+import type { NewsArticle } from "@/lib/cms/types";
 
 export function NewsList({ articles }: { articles: NewsArticle[] }) {
   if (articles.length === 0) return null;
@@ -23,12 +24,12 @@ export function NewsList({ articles }: { articles: NewsArticle[] }) {
           {articles.map((article) => (
             <Link key={article.id} href={`/news/${article.slug}`} className="group block">
               <div className="relative aspect-[4/3]">
-                <BrandImage src={article.hero_image_url} alt={article.title} label={article.title} />
+                <BrandImage src={mediaUrl(article.heroImage)} alt={article.title} label={article.title} />
               </div>
               {article.category && <p className="eyebrow mt-4 text-[10px]">{article.category}</p>}
               <h3 className="mt-1.5 font-serif text-lg text-brown group-hover:underline">{article.title}</h3>
-              {article.published_date && (
-                <p className="mt-1 text-xs text-grey">{formatDate(article.published_date)}</p>
+              {article.publishedDate && (
+                <p className="mt-1 text-xs text-grey">{formatDate(article.publishedDate)}</p>
               )}
             </Link>
           ))}

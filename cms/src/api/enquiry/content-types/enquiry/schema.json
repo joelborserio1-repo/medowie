@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "enquiries",
+  "info": {
+    "singularName": "enquiry",
+    "pluralName": "enquiries",
+    "displayName": "Enquiry",
+    "description": "Submissions from every public enquiry form."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": ["general", "stallion", "book_a_mare", "training", "horse_for_sale"],
+      "default": "general",
+      "required": true
+    },
+    "name": { "type": "string", "required": true },
+    "email": { "type": "email", "required": true },
+    "phone": { "type": "string" },
+    "subject": { "type": "string" },
+    "message": { "type": "text" },
+
+    "stallion": { "type": "relation", "relation": "manyToOne", "target": "api::stallion.stallion" },
+    "horse": { "type": "relation", "relation": "manyToOne", "target": "api::horse-for-sale.horse-for-sale" },
+
+    "mareName": { "type": "string" },
+    "mareAge": { "type": "string" },
+    "mareSire": { "type": "string" },
+    "mareDam": { "type": "string" },
+    "mareDamsire": { "type": "string" },
+    "breederOwner": { "type": "string" },
+    "semenRequirement": { "type": "string" },
+    "expectedCycleDate": { "type": "date" },
+    "state": { "type": "string" },
+    "country": { "type": "string" },
+
+    "horseName": { "type": "string" },
+    "horseAge": { "type": "string" },
+    "horseSex": { "type": "string" },
+    "currentLocation": { "type": "string" },
+    "serviceRequired": { "type": "string" },
+
+    "stage": {
+      "type": "enumeration",
+      "enum": ["new", "contacted", "follow_up", "closed"],
+      "default": "new",
+      "required": true
+    },
+    "notes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::enquiry-note.enquiry-note",
+      "mappedBy": "enquiry"
+    }
+  }
+}

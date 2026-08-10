@@ -1,12 +1,13 @@
 import { BrandImage } from "@/components/ui/BrandImage";
 import { Button } from "@/components/ui/Button";
 import { formatCurrency, formatFee, stallionDisplayName } from "@/lib/format";
-import type { Stallion } from "@/lib/supabase/types";
+import { mediaUrl } from "@/lib/cms/media";
+import type { Stallion } from "@/lib/cms/types";
 
 export function FeaturedStallion({ stallion }: { stallion: Stallion }) {
   const stats = [
-    stallion.mile_rate ? { label: "Best Mile Rate", value: stallion.mile_rate } : null,
-    stallion.career_earnings ? { label: "Career Earnings", value: formatCurrency(stallion.career_earnings) } : null,
+    stallion.mileRate ? { label: "Best Mile Rate", value: stallion.mileRate } : null,
+    stallion.careerEarnings ? { label: "Career Earnings", value: formatCurrency(stallion.careerEarnings) } : null,
     stallion.wins ? { label: "Wins", value: String(stallion.wins) } : null,
     stallion.starts ? { label: "Starts", value: String(stallion.starts) } : null,
   ].filter((s): s is { label: string; value: string } => Boolean(s));
@@ -15,8 +16,8 @@ export function FeaturedStallion({ stallion }: { stallion: Stallion }) {
     <div className="grid gap-0 border border-line lg:grid-cols-2">
       <div className="relative aspect-[4/3] lg:aspect-auto">
         <BrandImage
-          src={stallion.hero_image_url ?? stallion.profile_image_url}
-          alt={stallionDisplayName(stallion.name, stallion.country_suffix)}
+          src={mediaUrl(stallion.heroImage) ?? mediaUrl(stallion.profileImage)}
+          alt={stallionDisplayName(stallion.name, stallion.countrySuffix)}
           label={stallion.name}
           sizes="(min-width: 1024px) 50vw, 100vw"
         />
@@ -26,8 +27,8 @@ export function FeaturedStallion({ stallion }: { stallion: Stallion }) {
         <p className="eyebrow mb-3">Featured Stallion</p>
         <h3 className="font-serif text-3xl text-brown sm:text-4xl">
           {stallion.name}
-          {stallion.country_suffix && (
-            <span className="ml-2 text-xl font-normal text-earth">{stallion.country_suffix}</span>
+          {stallion.countrySuffix && (
+            <span className="ml-2 text-xl font-normal text-earth">{stallion.countrySuffix}</span>
           )}
         </h3>
 
@@ -53,7 +54,7 @@ export function FeaturedStallion({ stallion }: { stallion: Stallion }) {
 
         <div className="mt-6 border-t border-line pt-6">
           <p className="eyebrow mb-1 text-[10px]">Service Fee</p>
-          <p className="text-lg font-semibold text-charcoal">{formatFee(stallion.service_fee, stallion.includes_gst) ?? "POA"}</p>
+          <p className="text-lg font-semibold text-charcoal">{formatFee(stallion.serviceFee, stallion.includesGst) ?? "POA"}</p>
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">

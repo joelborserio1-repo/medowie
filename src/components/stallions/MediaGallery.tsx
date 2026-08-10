@@ -1,12 +1,13 @@
 import { BrandImage } from "@/components/ui/BrandImage";
-import type { StallionGalleryImage, StallionVideo } from "@/lib/supabase/types";
+import { mediaUrl, type StrapiMedia } from "@/lib/cms/media";
+import type { StallionVideo } from "@/lib/cms/types";
 
 function youtubeEmbedUrl(url: string): string | null {
   const match = url.match(/(?:youtu\.be\/|v=)([\w-]{11})/);
   return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 }
 
-export function MediaGallery({ gallery, videos }: { gallery: StallionGalleryImage[]; videos: StallionVideo[] }) {
+export function MediaGallery({ gallery, videos }: { gallery: StrapiMedia[]; videos: StallionVideo[] }) {
   if (gallery.length === 0 && videos.length === 0) return null;
 
   return (
@@ -19,7 +20,7 @@ export function MediaGallery({ gallery, videos }: { gallery: StallionGalleryImag
           <div className="mt-8 grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {gallery.map((img) => (
               <div key={img.id} className="relative aspect-square">
-                <BrandImage src={img.image_url} alt={img.alt_text ?? ""} />
+                <BrandImage src={mediaUrl(img)} alt={img.alternativeText ?? ""} />
               </div>
             ))}
           </div>
@@ -28,7 +29,7 @@ export function MediaGallery({ gallery, videos }: { gallery: StallionGalleryImag
         {videos.length > 0 && (
           <div className="mt-8 grid gap-6 sm:grid-cols-2">
             {videos.map((v) => {
-              const embed = youtubeEmbedUrl(v.youtube_url);
+              const embed = youtubeEmbedUrl(v.youtubeUrl);
               return (
                 <div key={v.id}>
                   {embed && (

@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_stallion_eligibilities",
+  "info": {
+    "displayName": "Eligible Scheme",
+    "icon": "check"
+  },
+  "options": {},
+  "attributes": {
+    "label": { "type": "string", "required": true }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "form_documents",
+  "info": {
+    "singularName": "form-document",
+    "pluralName": "form-documents",
+    "displayName": "Form / Contract",
+    "description": "Stallion service contracts, semen order forms and breeding documents."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "category": {
+      "type": "enumeration",
+      "enum": ["Stallion Service Contracts", "Semen Order Forms", "Breeding Information", "Other Documents"],
+      "default": "Other Documents",
+      "required": true
+    },
+    "season": { "type": "string" },
+    "stallion": { "type": "relation", "relation": "manyToOne", "target": "api::stallion.stallion", "inversedBy": "documentsResources" },
+    "file": { "type": "media", "multiple": false, "allowedTypes": ["files"], "required": true },
+    "description": { "type": "text" },
+    "active": { "type": "boolean", "default": true },
+    "displayOrder": { "type": "integer", "default": 0 }
+  }
+}

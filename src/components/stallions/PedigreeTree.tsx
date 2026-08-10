@@ -1,8 +1,11 @@
-import type { Stallion, StallionPedigree } from "@/lib/supabase/types";
+import { mediaUrl } from "@/lib/cms/media";
+import type { Stallion, StallionPedigree } from "@/lib/cms/types";
 
 export function PedigreeTree({ stallion, pedigree }: { stallion: Stallion; pedigree: StallionPedigree | null }) {
   const hasAny = stallion.sire || stallion.dam || pedigree;
   if (!hasAny) return null;
+
+  const pedigreeDocUrl = mediaUrl(stallion.pedigreeDocument);
 
   return (
     <section className="border-b border-line py-14">
@@ -16,10 +19,10 @@ export function PedigreeTree({ stallion, pedigree }: { stallion: Stallion; pedig
             <p className="mt-1 font-serif text-2xl text-brown">{stallion.sire ?? "—"}</p>
             <div className="mt-4 space-y-2 border-t border-line pt-4 text-sm text-grey">
               <p>
-                <span className="text-charcoal">Sire&apos;s Sire:</span> {pedigree?.sires_sire ?? "—"}
+                <span className="text-charcoal">Sire&apos;s Sire:</span> {pedigree?.siresSire ?? "—"}
               </p>
               <p>
-                <span className="text-charcoal">Sire&apos;s Dam:</span> {pedigree?.sires_dam ?? "—"}
+                <span className="text-charcoal">Sire&apos;s Dam:</span> {pedigree?.siresDam ?? "—"}
               </p>
             </div>
           </div>
@@ -29,18 +32,18 @@ export function PedigreeTree({ stallion, pedigree }: { stallion: Stallion; pedig
             <p className="mt-1 font-serif text-2xl text-brown">{stallion.dam ?? "—"}</p>
             <div className="mt-4 space-y-2 border-t border-line pt-4 text-sm text-grey">
               <p>
-                <span className="text-charcoal">Dam&apos;s Sire:</span> {pedigree?.dams_sire ?? stallion.damsire ?? "—"}
+                <span className="text-charcoal">Dam&apos;s Sire:</span> {pedigree?.damsSire ?? stallion.damsire ?? "—"}
               </p>
               <p>
-                <span className="text-charcoal">Dam&apos;s Dam:</span> {pedigree?.dams_dam ?? "—"}
+                <span className="text-charcoal">Dam&apos;s Dam:</span> {pedigree?.damsDam ?? "—"}
               </p>
             </div>
           </div>
         </div>
 
-        {stallion.pedigree_document_url && (
+        {pedigreeDocUrl && (
           <a
-            href={stallion.pedigree_document_url}
+            href={pedigreeDocUrl}
             className="mt-6 inline-block text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline"
           >
             Download Full Pedigree →

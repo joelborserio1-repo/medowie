@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_stallion_highlights",
+  "info": {
+    "displayName": "Career Highlight",
+    "icon": "trophy"
+  },
+  "options": {},
+  "attributes": {
+    "year": { "type": "string" },
+    "race": { "type": "string" },
+    "grade": { "type": "string" },
+    "result": { "type": "string" },
+    "track": { "type": "string" },
+    "notes": { "type": "text" }
+  }
+}

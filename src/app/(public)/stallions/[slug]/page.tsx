@@ -8,39 +8,37 @@ import { PedigreeTree } from "@/components/stallions/PedigreeTree";
 import { ProgenyList } from "@/components/stallions/ProgenyList";
 import { MediaGallery } from "@/components/stallions/MediaGallery";
 import { StallionEnquiryForm } from "@/components/forms/StallionEnquiryForm";
-import { getStallionDetail } from "@/lib/data/stallions";
+import { getStallionBySlug } from "@/lib/data/stallions";
 import { stallionDisplayName } from "@/lib/format";
+import { mediaUrl } from "@/lib/cms/media";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const detail = await getStallionDetail(slug).catch(() => null);
-  if (!detail) return {};
+  const stallion = await getStallionBySlug(slug).catch(() => null);
+  if (!stallion) return {};
 
-  const name = stallionDisplayName(detail.stallion.name, detail.stallion.country_suffix);
+  const name = stallionDisplayName(stallion.name, stallion.countrySuffix);
   const description =
-    detail.stallion.meta_description ??
-    detail.stallion.short_description ??
-    `${name} — Standardbred stallion standing at Medowie Lodge, NSW.`;
+    stallion.metaDescription ?? stallion.shortDescription ?? `${name} — Standardbred stallion standing at Medowie Lodge, NSW.`;
 
   return {
-    title: detail.stallion.meta_title ?? name,
+    title: stallion.metaTitle ?? name,
     description,
     alternates: { canonical: `/stallions/${slug}` },
     openGraph: {
       title: name,
       description,
-      images: detail.stallion.hero_image_url ? [detail.stallion.hero_image_url] : undefined,
+      images: mediaUrl(stallion.heroImage) ? [mediaUrl(stallion.heroImage)!] : undefined,
     },
   };
 }
 
 export default async function StallionProfilePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const detail = await getStallionDetail(slug).catch(() => null);
-  if (!detail) notFound();
+  const stallion = await getStallionBySlug(slug).catch(() => null);
+  if (!stallion || !["published", "archived"].includes(stallion.state)) notFound();
 
-  const { stallion, highlights, eligibility, gallery, videos, documents, progeny, pedigree } = detail;
-  const name = stallionDisplayName(stallion.name, stallion.country_suffix);
+  const name = stallionDisplayName(stallion.name, stallion.countrySuffix);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -52,15 +50,15 @@ export default async function StallionProfilePage({ params }: { params: Promise<
   };
 
   const offerJsonLd =
-    stallion.status === "published" && stallion.service_fee
+    stallion.state === "published" && stallion.serviceFee
       ? {
           "@context": "https://schema.org",
           "@type": "Product",
           name: `${name} Stallion Service`,
-          description: stallion.short_description ?? `Stallion service — ${name}`,
+          description: stallion.shortDescription ?? `Stallion service — ${name}`,
           offers: {
             "@type": "Offer",
-            price: stallion.service_fee,
+            price: stallion.serviceFee,
             priceCurrency: "AUD",
             availability: "https://schema.org/InStock",
           },
@@ -77,35 +75,35 @@ export default async function StallionProfilePage({ params }: { params: Promise<
       <StallionHero stallion={stallion} />
       <QuickStats stallion={stallion} />
 
-      {stallion.full_biography && (
+      {stallion.fullBiography && (
         <section className="border-b border-line py-14">
           <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
             <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
               <p className="eyebrow">Overview</p>
               <div className="max-w-2xl whitespace-pre-line text-[16px] leading-relaxed text-charcoal">
-                {stallion.full_biography}
+                {stallion.fullBiography}
               </div>
             </div>
           </div>
         </section>
       )}
 
-      <CareerHighlightsTable highlights={highlights} />
-      <BreedingInformation stallion={stallion} eligibility={eligibility} />
-      <PedigreeTree stallion={stallion} pedigree={pedigree} />
-      <ProgenyList progeny={progeny} />
+      <CareerHighlightsTable highlights={stallion.highlights} />
+      <BreedingInformation stallion={stallion} eligibility={stallion.eligibility} />
+      <PedigreeTree stallion={stallion} pedigree={stallion.pedigree} />
+      <ProgenyList progeny={stallion.progeny} />
 
-      {stallion.mating_information && (
+      {stallion.matingInformation && (
         <section className="border-b border-line py-14">
           <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
             <p className="eyebrow mb-3">Mating Information</p>
             <h2 className="font-serif text-3xl text-brown">Mating Hints</h2>
             <div className="mt-6 max-w-2xl whitespace-pre-line text-[15px] leading-relaxed text-grey">
-              {stallion.mating_information}
+              {stallion.matingInformation}
             </div>
-            {stallion.mating_pdf_url && (
+            {mediaUrl(stallion.matingPdf) && (
               <a
-                href={stallion.mating_pdf_url}
+                href={mediaUrl(stallion.matingPdf)!}
                 className="mt-4 inline-block text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline"
               >
                 Download Mating Hints PDF →
@@ -115,18 +113,18 @@ export default async function StallionProfilePage({ params }: { params: Promise<
         </section>
       )}
 
-      <MediaGallery gallery={gallery} videos={videos} />
+      <MediaGallery gallery={stallion.gallery} videos={stallion.videos} />
 
-      {documents.length > 0 && (
+      {stallion.documents.length > 0 && (
         <section className="border-b border-line py-14">
           <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
             <p className="eyebrow mb-3">Documents</p>
             <h2 className="font-serif text-3xl text-brown">Downloads</h2>
             <ul className="mt-6 space-y-2">
-              {documents.map((d) => (
+              {stallion.documents.map((d) => (
                 <li key={d.id}>
-                  <a href={d.file_url} className="text-sm font-medium text-orange hover:underline">
-                    {d.title} →
+                  <a href={mediaUrl(d)!} className="text-sm font-medium text-orange hover:underline">
+                    {d.name} →
                   </a>
                 </li>
               ))}
@@ -139,7 +137,7 @@ export default async function StallionProfilePage({ params }: { params: Promise<
         <div className="mx-auto w-full max-w-2xl px-5 sm:px-8">
           <p className="eyebrow mb-3">Enquire</p>
           <h2 className="mb-6 font-serif text-3xl text-brown">Breeding Enquiry</h2>
-          <StallionEnquiryForm stallionId={stallion.id} stallionName={name} />
+          <StallionEnquiryForm stallionId={String(stallion.id)} stallionName={name} />
         </div>
       </section>
     </div>
