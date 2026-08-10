@@ -27,6 +27,7 @@ export function BrandImage({
       <div
         className={clsx(
           "flex items-center justify-center bg-parchment",
+          fill ? "absolute inset-0" : "h-full w-full",
           className
         )}
         role="img"
