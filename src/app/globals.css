@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+  --color-orange: #e65300;
+  --color-orange-dark: #b84400;
+  --color-brown: #4a260a;
+  --color-brown-light: #6b3a12;
+  --color-warm-white: #faf8f3;
+  --color-parchment: #f2eee6;
+  --color-charcoal: #252525;
+  --color-grey: #817a70;
+  --color-earth: #a49b88;
+  --color-line: #ddd5c7;
+}
+
+@theme inline {
+  --color-orange: var(--color-orange);
+  --color-orange-dark: var(--color-orange-dark);
+  --color-brown: var(--color-brown);
+  --color-brown-light: var(--color-brown-light);
+  --color-warm-white: var(--color-warm-white);
+  --color-parchment: var(--color-parchment);
+  --color-charcoal: var(--color-charcoal);
+  --color-grey: var(--color-grey);
+  --color-earth: var(--color-earth);
+  --color-line: var(--color-line);
+
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
+
+  --radius-brand: 3px;
+}
+
+body {
+  background: var(--color-warm-white);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-orange);
+}
+
+.rule {
+  border: none;
+  border-top: 1px solid var(--color-line);
+}
+
+::selection {
+  background: var(--color-orange);
+  color: var(--color-warm-white);
+}
+
+a {
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
