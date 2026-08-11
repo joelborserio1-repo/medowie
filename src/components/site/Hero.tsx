@@ -5,7 +5,20 @@ export function Hero({ imageUrl }: { imageUrl?: string | null }) {
   return (
     <section className="relative flex h-[68vh] min-h-[440px] items-end overflow-hidden bg-brown text-warm-white">
       <div className="absolute inset-0">
+        {/* Static fallback: shown for prefers-reduced-motion, and while/if the video doesn't load. The
+            video sits on top at full opacity so this never shows through once it's playing. */}
         <BrandImage src={imageUrl} alt="Medowie Lodge" label="Medowie Lodge" className="opacity-90" />
+        <video
+          className="absolute inset-0 h-full w-full object-contain motion-reduce:hidden"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        >
+          <source src="/video/hero.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/10 to-transparent" />
       </div>
 

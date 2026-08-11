@@ -55,10 +55,10 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
           <Image
             src="/brand/medowie-lodge-logo.png"
             alt="Medowie Lodge — Harness Racing"
-            width={644}
-            height={724}
+            width={762}
+            height={380}
             priority
-            className="h-12 w-auto sm:h-14"
+            className="h-10 w-auto sm:h-12"
           />
         </Link>
 

@@ -8,9 +8,9 @@ exactly which record each one is attached to and what's still unverified about i
 
 - `soho-lanikai-flyer.jpg` — Medowie Lodge's own promotional flyer for the stallion Soho Lanikai.
   Attached to his `gallery` field.
-- `apg-2018-lot-327.png` — the real APG 2018 Sydney Yearling Sale catalogue photo for Lot 327
+- `apg-2018-lot-327.webp` — the real APG 2018 Sydney Yearling Sale catalogue photo for Lot 327
   (Somebeachsomewhere x Go Right Babe). Attached to that horse-for-sale record's `heroImage`.
-- `racing-colours.webp` — a candid photo of the stable's racing colours (white/orange, maroon star).
+- `racing-colours.png` — a candid photo of the stable's racing colours (white/orange, maroon star).
   Attached to the About page's `heroImage`. Not captioned as any specific horse or race — that wasn't
   identified in the source material.
 

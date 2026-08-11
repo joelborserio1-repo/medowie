@@ -47,7 +47,7 @@ added, and the sections below for exactly which facts came from which flyer.
 - **Three historical yearling sale records** from the "2018 Sydney APG Yearling Sale" example on the
   Horses for Sale page (Lot 327, 357, 428), including their real sire/dam pairings, seeded as
   `sold`/archive entries — not current listings. **Lot 327** also gets its real sale-catalogue photo
-  (`cms/seed-assets/apg-2018-lot-327.png`), attached automatically as its `heroImage` on first boot.
+  (`cms/seed-assets/apg-2018-lot-327.webp`), attached automatically as its `heroImage` on first boot.
 - **Soho Lanikai**, a sixth stallion, from a dedicated Medowie Lodge promotional flyer: service fee
   ($2,000 inc. GST), sire (Somebeachsomewhere), gait (Pacer, inferred from the sulky photo and mile
   rate), and his first-start result ("won by 65 metres in 1:54") as a career highlight. The flyer names
@@ -60,7 +60,7 @@ added, and the sections below for exactly which facts came from which flyer.
   Training, Fitness & Development, Prepared for Success, Professional Photos & Videos) with their real
   captions, all read directly off the Yearling Preparation flyer.
 - **About page**: a real, unbranded photo of the stable's racing colours (white jacket, orange sleeves,
-  maroon star) is attached as the page's `heroImage` (`cms/seed-assets/racing-colours.webp`) — it isn't
+  maroon star) is attached as the page's `heroImage` (`cms/seed-assets/racing-colours.png`) — it isn't
   captioned as any specific horse, since the flyer batch didn't identify which horse or race it's from.
 - **Site logo**: the real Medowie Lodge horse-head-and-star lockup now renders in the site header
   (`public/brand/medowie-lodge-logo.png`), replacing the plain text wordmark used until now.

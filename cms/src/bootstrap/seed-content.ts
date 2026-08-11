@@ -109,7 +109,7 @@ async function seedAboutPage(strapi: Core.Strapi) {
 
   const heroImage = await uploadSeedAsset(
     strapi,
-    'racing-colours.webp',
+    'racing-colours.png',
     'Medowie Lodge racing colours — white and orange with a maroon star'
   );
 
@@ -288,7 +288,7 @@ async function seedArchivedYearlingSales(strapi: Core.Strapi) {
 
   const lot327Image = await uploadSeedAsset(
     strapi,
-    'apg-2018-lot-327.png',
+    'apg-2018-lot-327.webp',
     'Lot 327 — Somebeachsomewhere x Go Right Babe, Sydney APG Yearling Sale 2018'
   );
 

@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Next.js 16 blocks image optimization against local/private IPs by default (SSRF
+    // hardening) — localhost resolves to one, so local Strapi dev images 400 without this.
+    // Safe here: remotePatterns below already scopes it to exactly localhost:1337.
+    dangerouslyAllowLocalIP: process.env.NODE_ENV !== "production",
     remotePatterns: [
       // Local Strapi dev server.
       { protocol: "http", hostname: "localhost", port: "1337" },

@@ -1,20 +1,26 @@
-import { BrandImage } from "@/components/ui/BrandImage";
+import Image from "next/image";
 
-const PARTS = [
+const BANNERS = [
   {
     key: "stud",
-    label: "Stud",
-    copy: "Medowie Lodge stands Standardbred stallions for the breeding season, offering chilled and frozen semen services alongside on-property natural cover where available.",
+    src: "/home/stud.webp",
+    width: 1625,
+    height: 968,
+    alt: "Medowie Lodge Stud — quality stallions, chilled and frozen semen available, on-property natural cover, proven results",
   },
   {
     key: "training",
-    label: "Training",
-    copy: "Darren Reay is a licensed Harness Racing trainer preparing horses for race day from the Medowie property, in the Hunter Region of New South Wales.",
+    src: "/home/training.webp",
+    width: 1625,
+    height: 968,
+    alt: "Medowie Lodge Training — race day preparation, fitness and conditioning, individual programs, dedication and experience",
   },
   {
     key: "yearling",
-    label: "Yearling Preparation",
-    copy: "Yearlings are hand-raised and prepared at Medowie Lodge for presentation at the Sydney APG and Bathurst yearling sales each year.",
+    src: "/home/yearling-preparation.webp",
+    width: 1672,
+    height: 941,
+    alt: "Medowie Lodge Yearling Preparation — hand-raised care, sales ring preparation, professional presentation, Sydney APG and Bathurst sales",
   },
 ];
 
@@ -27,15 +33,17 @@ export function OperationIntro() {
           Stud, training and preparation under one property.
         </h2>
 
-        <div className="mt-10 grid gap-8 md:grid-cols-3">
-          {PARTS.map((part) => (
-            <div key={part.key}>
-              <div className="relative aspect-[5/4]">
-                <BrandImage src={null} alt={part.label} label={part.label} />
-              </div>
-              <h3 className="mt-4 font-serif text-xl text-brown">{part.label}</h3>
-              <p className="mt-2 text-[14px] leading-relaxed text-grey">{part.copy}</p>
-            </div>
+        <div className="mt-10 flex flex-col gap-8">
+          {BANNERS.map((banner) => (
+            <Image
+              key={banner.key}
+              src={banner.src}
+              alt={banner.alt}
+              width={banner.width}
+              height={banner.height}
+              className="h-auto w-full"
+              sizes="(min-width: 1400px) 1400px, 100vw"
+            />
           ))}
         </div>
       </div>
