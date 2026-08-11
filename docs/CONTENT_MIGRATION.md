@@ -21,6 +21,18 @@ The CMS itself was later rebuilt on Strapi (see `cms/`); the verified content be
 `cms/src/bootstrap/seed-content.ts`, which runs automatically on Strapi's first boot and is safe to
 re-run (it skips anything already present, so it never overwrites staff-entered data).
 
+Later still, the user pasted several real Medowie Lodge promotional images directly into the
+conversation: a clean logo lockup, a Soho Lanikai stallion flyer, a Yearling Preparation flyer, an APG
+2018 Lot 327 sale photo, and a candid photo of the stable's racing colours (plus one beanie/merchandise
+ad, deliberately not used as site content — it's product marketing, not stud information). Pasted
+chat images have no file on disk by default, the same limitation noted above for the first batch of
+screenshots — but this time the images' base64 bytes were recovered directly from the session
+transcript (`~/.claude/projects/.../*.jsonl`, where Claude Code stores full conversation history
+including inline image attachments) and decoded back into real image files. That made it possible, for
+the first time in this project, to commit **actual verified photography** rather than only transcribing
+text from images. See `cms/seed-assets/README` (the files themselves) and `public/brand/` for what was
+added, and the sections below for exactly which facts came from which flyer.
+
 ## What is verified and seeded (`cms/src/bootstrap/seed-content.ts`)
 
 - **Business details**: address (951 Richardson Road, Medowie NSW 2318), phone (0429 817 199), email
@@ -34,7 +46,24 @@ re-run (it skips anything already present, so it never overwrites staff-entered 
   site's own "TR" notation next to trotters.
 - **Three historical yearling sale records** from the "2018 Sydney APG Yearling Sale" example on the
   Horses for Sale page (Lot 327, 357, 428), including their real sire/dam pairings, seeded as
-  `sold`/archive entries — not current listings.
+  `sold`/archive entries — not current listings. **Lot 327** also gets its real sale-catalogue photo
+  (`cms/seed-assets/apg-2018-lot-327.png`), attached automatically as its `heroImage` on first boot.
+- **Soho Lanikai**, a sixth stallion, from a dedicated Medowie Lodge promotional flyer: service fee
+  ($2,000 inc. GST), sire (Somebeachsomewhere), gait (Pacer, inferred from the sulky photo and mile
+  rate), and his first-start result ("won by 65 metres in 1:54") as a career highlight. The flyer names
+  his dam only as "a Group 1 winning mare" with no actual name given, so the `dam` field is left blank
+  rather than guessed. Like the other five, seeded as `admin_review` — the flyer carries no date, so
+  current standing status can't be confirmed. The flyer image itself is attached to his `gallery` field
+  (`cms/seed-assets/soho-lanikai-flyer.jpg`).
+- **Yearling Preparation page**: the "30 Years Experience / Proven Results / Professional Care" stat,
+  the "Experience. Dedication. Results." tagline, and the four feature blocks (Expert Handling &
+  Training, Fitness & Development, Prepared for Success, Professional Photos & Videos) with their real
+  captions, all read directly off the Yearling Preparation flyer.
+- **About page**: a real, unbranded photo of the stable's racing colours (white jacket, orange sleeves,
+  maroon star) is attached as the page's `heroImage` (`cms/seed-assets/racing-colours.webp`) — it isn't
+  captioned as any specific horse, since the flyer batch didn't identify which horse or race it's from.
+- **Site logo**: the real Medowie Lodge horse-head-and-star lockup now renders in the site header
+  (`public/brand/medowie-lodge-logo.png`), replacing the plain text wordmark used until now.
 
 ## What is deliberately left blank
 
@@ -46,8 +75,10 @@ state, never a guess:
 - Whether each of the five stallions is **currently standing** — the source page's own "2023/2024
   breeding season" label and "© 2015–2025" footer show the live site is already out of date, so
   season-status cannot be treated as current. All five are seeded with `state: admin_review`.
-- All **photography** — stallion, training, yearling and property images. `BrandImage` renders a plain
-  brand-toned placeholder panel (never AI-generated art) wherever a media field is empty.
+- All other **photography** — the four original stallions' images, training and property photos, and
+  the Yearling Preparation flyer's own photography (only its text copy was migrated, not the flyer
+  image itself — see above). `BrandImage` renders a plain brand-toned placeholder panel (never
+  AI-generated art) wherever a media field is empty.
 - Training/About/Yearling Preparation **sub-sections** the brief asked for (Race Training,
   Breaking-In, Facilities, Sale Preparation, Handling & Education, Presentation, Breeding, region copy)
   — the live site didn't contain this detail, so those fields on the relevant single types (Training

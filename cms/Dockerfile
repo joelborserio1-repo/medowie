@@ -20,6 +20,7 @@ COPY --from=build /opt/app/dist ./dist
 COPY --from=build /opt/app/public ./public
 COPY --from=build /opt/app/config ./config
 COPY --from=build /opt/app/src ./src
+COPY --from=build /opt/app/seed-assets ./seed-assets
 
 RUN addgroup -S strapi && adduser -S strapi -G strapi \
   && chown -R strapi:strapi /opt/app

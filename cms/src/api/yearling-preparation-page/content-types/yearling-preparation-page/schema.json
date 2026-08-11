@@ -13,6 +13,9 @@
   "pluginOptions": {},
   "attributes": {
     "introBody": { "type": "text" },
+    "tagline": { "type": "string" },
+    "yearsExperience": { "type": "integer" },
+    "features": { "type": "component", "component": "page.feature", "repeatable": true },
     "salePreparationHeading": { "type": "string", "default": "Sale Preparation" },
     "salePreparationBody": { "type": "text" },
     "handlingEducationHeading": { "type": "string", "default": "Handling & Education" },

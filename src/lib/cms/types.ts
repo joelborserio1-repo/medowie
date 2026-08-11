@@ -238,6 +238,7 @@ export interface Homepage {
 
 export interface AboutPage {
   introBody: string | null;
+  heroImage: StrapiMedia | null;
   darrenHeading: string | null;
   darrenBody: string | null;
   breedingHeading: string | null;
@@ -260,8 +261,16 @@ export interface TrainingPage {
   facilitiesBody: string | null;
 }
 
+export interface PageFeature {
+  heading: string;
+  body: string | null;
+}
+
 export interface YearlingPreparationPage {
   introBody: string | null;
+  tagline: string | null;
+  yearsExperience: number | null;
+  features: PageFeature[] | null;
   salePreparationHeading: string | null;
   salePreparationBody: string | null;
   handlingEducationHeading: string | null;

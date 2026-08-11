@@ -464,6 +464,7 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
     darrenBody: Schema.Attribute.Text;
     darrenHeading: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Darren Reay & Family'>;
+    heroImage: Schema.Attribute.Media<'images'>;
     introBody: Schema.Attribute.Text;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -1025,6 +1026,7 @@ export interface ApiYearlingPreparationPageYearlingPreparationPage
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    features: Schema.Attribute.Component<'page.feature', true>;
     handlingEducationBody: Schema.Attribute.Text;
     handlingEducationHeading: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Handling & Education'>;
@@ -1042,9 +1044,11 @@ export interface ApiYearlingPreparationPageYearlingPreparationPage
     salePreparationBody: Schema.Attribute.Text;
     salePreparationHeading: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Sale Preparation'>;
+    tagline: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    yearsExperience: Schema.Attribute.Integer;
   };
 }
 

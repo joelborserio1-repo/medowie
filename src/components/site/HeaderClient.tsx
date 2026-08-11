@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { clsx } from "clsx";
@@ -50,10 +51,15 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
       )}
     >
       <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between px-5 sm:px-8">
-        <Link href="/" className="flex items-baseline gap-2">
-          <span className="font-serif text-xl font-semibold tracking-wide text-brown sm:text-2xl">
-            MEDOWIE LODGE
-          </span>
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/brand/medowie-lodge-logo.png"
+            alt="Medowie Lodge — Harness Racing"
+            width={644}
+            height={724}
+            priority
+            className="h-12 w-auto sm:h-14"
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">

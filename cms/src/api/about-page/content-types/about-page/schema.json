@@ -13,6 +13,7 @@
   "pluginOptions": {},
   "attributes": {
     "introBody": { "type": "text" },
+    "heroImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "darrenHeading": { "type": "string", "default": "Darren Reay & Family" },
     "darrenBody": { "type": "text" },
     "breedingHeading": { "type": "string", "default": "Breeding" },

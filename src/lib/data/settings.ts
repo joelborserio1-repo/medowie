@@ -10,7 +10,7 @@ export async function getHomepage(): Promise<Homepage | null> {
 }
 
 export async function getAboutPage(): Promise<AboutPage | null> {
-  return strapiFindOne<AboutPage>("/about-page");
+  return strapiFindOne<AboutPage>("/about-page", { populate: "*" });
 }
 
 export async function getTrainingPage(): Promise<TrainingPage | null> {
@@ -18,5 +18,5 @@ export async function getTrainingPage(): Promise<TrainingPage | null> {
 }
 
 export async function getYearlingPreparationPage(): Promise<YearlingPreparationPage | null> {
-  return strapiFindOne<YearlingPreparationPage>("/yearling-preparation-page");
+  return strapiFindOne<YearlingPreparationPage>("/yearling-preparation-page", { populate: "*" });
 }

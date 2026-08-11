@@ -3,6 +3,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { ContentSection } from "@/components/site/ContentSection";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { getAboutPage } from "@/lib/data/settings";
+import { mediaUrl } from "@/lib/cms/media";
 
 export const metadata: Metadata = {
   title: "About",
@@ -24,7 +25,7 @@ export default async function AboutPage() {
               {page.introBody}
             </div>
             <div className="relative aspect-[4/3]">
-              <BrandImage src={null} alt="Medowie Lodge" label="Medowie Lodge" />
+              <BrandImage src={mediaUrl(page.heroImage)} alt="Medowie Lodge" label="Medowie Lodge" />
             </div>
           </div>
         </section>
