@@ -12,6 +12,18 @@ export interface PageFeature extends Struct.ComponentSchema {
   };
 }
 
+export interface PageSection extends Struct.ComponentSchema {
+  collectionName: 'components_page_sections';
+  info: {
+    displayName: 'Section';
+    icon: 'layout';
+  };
+  attributes: {
+    body: Schema.Attribute.Text;
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface StallionEligibility extends Struct.ComponentSchema {
   collectionName: 'components_stallion_eligibilities';
   info: {
@@ -91,6 +103,7 @@ declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
       'page.feature': PageFeature;
+      'page.section': PageSection;
       'stallion.eligibility': StallionEligibility;
       'stallion.highlight': StallionHighlight;
       'stallion.pedigree': StallionPedigree;

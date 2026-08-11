@@ -115,16 +115,118 @@ async function seedAboutPage(strapi: Core.Strapi) {
 
   const data = {
     introBody:
-      'Medowie Lodge is a Standardbred stud and harness racing stable based at Medowie in the Port Stephens area of the Hunter Region, New South Wales, operated by Darren Reay and family.',
+      'Medowie Lodge is a proudly Australian Standardbred operation based in Medowie, in the Hunter Region of New South Wales.\n\n' +
+      'Built around practical horsemanship, experience and a genuine understanding of the racing industry, Medowie Lodge provides a complete range of services across breeding, breaking-in, yearling preparation and race training.',
+    tagline: 'Experience. Dedication. Results.',
     darrenBody:
-      'Darren Reay is a licensed Harness Racing trainer, studmaster, breeder and owner, and Vice President of Harness Breeders NSW.',
+      'At the centre of the operation is Darren Reay, a licensed Harness Racing trainer with decades of experience working with Standardbreds at every stage of their development. Over the years, Darren has built a reputation for being hands-on, consistent and highly attentive to the individual needs of each horse.\n\n' +
+      'The philosophy at Medowie Lodge is straightforward: every horse is different, and every horse deserves to be prepared accordingly.\n\n' +
+      'Whether a young horse is taking its first steps through the breaking-in process, a yearling is being prepared for the sales ring, a racehorse is progressing through its training program, or a stallion is standing for the breeding season, the focus remains the same: good care, good foundations and professional preparation.',
+    trainingHeading: 'Race Training',
+    trainingBody:
+      'Darren Reay is a licensed Harness Racing trainer preparing Standardbreds from the Medowie property.\n\n' +
+      'Training programs are developed around the individual horse, taking into consideration its age, experience, fitness, temperament and stage of preparation.\n\n' +
+      'From young horses beginning their first racing campaign through to experienced racehorses returning to work, the focus is on building fitness progressively while maintaining soundness and confidence.\n\n' +
+      'The team takes a practical approach to training, paying close attention to how each horse is coping physically and mentally throughout its preparation.\n\n' +
+      'Race day may be the final destination, but the work that happens in the weeks and months beforehand is what creates the opportunity to perform.',
+    breedingHeading: 'Stud Services',
+    breedingBody:
+      'Medowie Lodge also stands Standardbred stallions during the breeding season.\n\n' +
+      'Depending on the stallion and availability, services may include chilled semen, frozen semen and on-property natural cover.\n\n' +
+      'The stud operation is managed with the same practical and professional approach applied throughout the rest of the property.\n\n' +
+      'Breeders can expect clear communication, experienced handling and a strong focus on the welfare of both stallions and mares throughout the breeding process.\n\n' +
+      'The aim is to make breeding arrangements as straightforward as possible while maintaining a high standard of care.',
+    regionHeading: 'Based in the Hunter Region',
+    regionBody:
+      'Located at Medowie, NSW, Medowie Lodge is positioned within the Hunter Region and provides services to owners and breeders from across New South Wales and beyond.\n\n' +
+      'The property brings together the facilities required for breeding, education, preparation and training within the one operation.\n\n' +
+      'It allows horses to be managed within a dedicated equine environment while remaining within convenient reach of major harness racing and sales centres.',
+    sections: [
+      {
+        heading: 'A Complete Standardbred Operation',
+        body:
+          'One of the strengths of Medowie Lodge is the ability to provide multiple services from the one property.\n\n' +
+          'The operation combines stud services, yearling preparation, breaking-in and race training, allowing horses to remain within a familiar and professionally managed environment throughout different stages of their development.\n\n' +
+          'For owners and breeders, this provides continuity.\n\n' +
+          'The people handling the horse understand its history, temperament, strengths and individual requirements. Training and preparation can be adjusted as the horse develops, rather than taking a one-size-fits-all approach.\n\n' +
+          'This continuity is particularly valuable with young horses, where consistent handling and good early experiences can have a significant impact on their confidence and future performance.',
+      },
+      {
+        heading: 'Experience That Comes From Doing The Work',
+        body:
+          'Medowie Lodge is not built around theory.\n\n' +
+          'It is built around years spent working with horses every day.\n\n' +
+          'That experience covers the full process, from handling young stock and preparing yearlings through to educating horses in harness and conditioning racehorses for competition.\n\n' +
+          'Darren and the Medowie Lodge team understand that successful preparation is often found in the small details: knowing when a horse needs to be pushed forward, when it needs more time, when something feels different and when a program needs to be adjusted.\n\n' +
+          'There are no shortcuts to producing a well-prepared horse.\n\n' +
+          'It takes time, patience, consistency and experienced hands.\n\n' +
+          'That is the standard Medowie Lodge works towards with every horse that comes through the property.',
+      },
+      {
+        heading: 'Breaking-In and Early Education',
+        body:
+          "The breaking-in stage is one of the most important parts of a young Standardbred's development.\n\n" +
+          'At Medowie Lodge, the emphasis is on creating confident, manageable horses with a solid foundation for their future racing careers.\n\n' +
+          'Young horses are introduced progressively to the equipment, routine and expectations that will become part of their working life.\n\n' +
+          'Rather than rushing the process, horses are given the opportunity to understand what is being asked of them.\n\n' +
+          'Good early education should produce a horse that is willing, confident and comfortable in its work.\n\n' +
+          'The aim is not simply to get a horse into harness.\n\n' +
+          'The aim is to give that horse the best possible foundation to move forward into training.',
+      },
+      {
+        heading: 'Yearling Preparation',
+        body:
+          'Medowie Lodge prepares Standardbred yearlings for presentation at major sales including the Sydney APG and Bathurst yearling sales.\n\n' +
+          'Yearling preparation begins well before the horse enters the sales ring.\n\n' +
+          'Horses are handled regularly and introduced to a structured routine designed to improve their manners, fitness, presentation and confidence.\n\n' +
+          'The goal is to have each yearling arrive at the sales prepared to present professionally and show itself at its best.\n\n' +
+          'Attention is given to conditioning, handling, grooming, movement and overall presentation.\n\n' +
+          'For buyers, first impressions matter.\n\n' +
+          'For breeders and vendors, presenting a yearling well is an important part of showcasing the work that has gone into producing that horse.\n\n' +
+          'Medowie Lodge treats that responsibility seriously.',
+      },
+      {
+        heading: 'Horse Welfare Comes First',
+        body:
+          'While racing and sales are results-driven industries, Medowie Lodge believes those results begin with the way horses are cared for.\n\n' +
+          'Horse welfare is central to the operation.\n\n' +
+          'Every horse is monitored closely and treated as an individual.\n\n' +
+          "Training, handling and preparation programs are adapted where necessary based on the horse's condition, temperament and progress.\n\n" +
+          'Good horsemanship means understanding when to ask for more and when to give a horse time.\n\n' +
+          'It means creating routines that allow horses to thrive physically and mentally.\n\n' +
+          'Most importantly, it means never losing sight of the fact that the horse comes first.',
+      },
+      {
+        heading: 'A Hands-On Approach',
+        body:
+          'Medowie Lodge remains a genuinely hands-on operation.\n\n' +
+          'Darren and the team are directly involved in the day-to-day management, handling and preparation of the horses in their care.\n\n' +
+          'That means owners and breeders are dealing with people who know their horses.\n\n' +
+          'They understand how they are progressing, how they are behaving and what stage they are at within their program.\n\n' +
+          'For owners, that level of involvement provides confidence.\n\n' +
+          'For the horses, it provides consistency.',
+      },
+      {
+        heading: 'Built on Experience. Focused on the Future.',
+        body:
+          'For Medowie Lodge, the objective has always been bigger than preparing a horse for one race or one sale.\n\n' +
+          'It is about giving horses the foundations they need for the next stage of their career.\n\n' +
+          'A well-handled yearling becomes easier to educate.\n\n' +
+          'A well-educated young horse becomes easier to train.\n\n' +
+          'A well-prepared racehorse is given the opportunity to perform at its best.\n\n' +
+          'That progression is what Medowie Lodge is built around.\n\n' +
+          'From the breeding barn to the sales ring and the racetrack, Medowie Lodge provides experienced, professional care through every stage of the Standardbred journey.',
+      },
+    ],
     ...(heroImage ? { heroImage } : {}),
   };
 
+  // Document Service, not strapi.query — `sections` is a repeatable component (see the note in
+  // seedYearlingPreparationPage above for why the raw Query Engine can't write those).
   if (existing) {
-    await strapi.query('api::about-page.about-page').update({ where: { id: existing.id }, data });
+    await strapi.documents('api::about-page.about-page').update({ documentId: existing.documentId, data });
   } else {
-    await strapi.query('api::about-page.about-page').create({ data });
+    await strapi.documents('api::about-page.about-page').create({ data });
   }
   strapi.log.info('Seeded about page introduction.');
 }

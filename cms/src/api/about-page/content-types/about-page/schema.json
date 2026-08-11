@@ -13,9 +13,11 @@
   "pluginOptions": {},
   "attributes": {
     "introBody": { "type": "text" },
+    "tagline": { "type": "string" },
     "heroImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "darrenHeading": { "type": "string", "default": "Darren Reay & Family" },
     "darrenBody": { "type": "text" },
+    "sections": { "type": "component", "component": "page.section", "repeatable": true },
     "breedingHeading": { "type": "string", "default": "Breeding" },
     "breedingBody": { "type": "text" },
     "trainingHeading": { "type": "string", "default": "Training" },

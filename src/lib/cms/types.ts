@@ -238,9 +238,11 @@ export interface Homepage {
 
 export interface AboutPage {
   introBody: string | null;
+  tagline: string | null;
   heroImage: StrapiMedia | null;
   darrenHeading: string | null;
   darrenBody: string | null;
+  sections: PageFeature[] | null;
   breedingHeading: string | null;
   breedingBody: string | null;
   trainingHeading: string | null;

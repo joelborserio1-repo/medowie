@@ -23,6 +23,7 @@ export default async function AboutPage() {
           <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
             <div className="max-w-lg whitespace-pre-line text-[16px] leading-relaxed text-charcoal">
               {page.introBody}
+              {page.tagline && <p className="mt-6 font-serif text-xl italic text-orange">{page.tagline}</p>}
             </div>
             <div className="relative aspect-[4/3]">
               <BrandImage src={mediaUrl(page.heroImage)} alt="Medowie Lodge" label="Medowie Lodge" />
@@ -32,9 +33,21 @@ export default async function AboutPage() {
       )}
 
       <ContentSection heading={page?.darrenHeading} body={page?.darrenBody} eyebrow="Darren Reay & Family" />
-      <ContentSection heading={page?.breedingHeading} body={page?.breedingBody} eyebrow="Breeding" />
+      {page?.sections?.slice(0, 3).map((s) => (
+        <ContentSection key={s.heading} heading={s.heading} body={s.body} />
+      ))}
       <ContentSection heading={page?.trainingHeading} body={page?.trainingBody} eyebrow="Training" />
+      {page?.sections?.slice(3, 4).map((s) => (
+        <ContentSection key={s.heading} heading={s.heading} body={s.body} />
+      ))}
+      <ContentSection heading={page?.breedingHeading} body={page?.breedingBody} eyebrow="Stud" />
+      {page?.sections?.slice(4, 6).map((s) => (
+        <ContentSection key={s.heading} heading={s.heading} body={s.body} />
+      ))}
       <ContentSection heading={page?.regionHeading} body={page?.regionBody} eyebrow="Medowie / Hunter Region" />
+      {page?.sections?.slice(6, 7).map((s) => (
+        <ContentSection key={s.heading} heading={s.heading} body={s.body} />
+      ))}
     </div>
   );
 }

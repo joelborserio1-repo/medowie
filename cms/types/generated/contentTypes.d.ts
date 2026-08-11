@@ -476,6 +476,8 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
     regionBody: Schema.Attribute.Text;
     regionHeading: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Medowie / Hunter Region'>;
+    sections: Schema.Attribute.Component<'page.section', true>;
+    tagline: Schema.Attribute.String;
     trainingBody: Schema.Attribute.Text;
     trainingHeading: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Training'>;
