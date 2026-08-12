@@ -3,6 +3,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { ContentSection } from "@/components/site/ContentSection";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { getContentBlocks } from "@/lib/data/settings";
+import type { SiteContentBlock } from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
   title: "About",
@@ -27,7 +28,12 @@ const SECTIONS = [
 const KEYS = ["about_intro", ...SECTIONS.map((s) => s.key)] as const;
 
 export default async function AboutPage() {
-  const blocks = await getContentBlocks([...KEYS]);
+  let blocks: Record<string, SiteContentBlock> = {};
+  try {
+    blocks = await getContentBlocks([...KEYS]);
+  } catch {
+    // Supabase temporarily unreachable — render the page with no content rather than crashing.
+  }
   const intro = blocks["about_intro"];
   const sections = SECTIONS.filter((s) => blocks[s.key]?.body);
 

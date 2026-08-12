@@ -5,7 +5,7 @@ import { PastYearlingsGallery } from "@/components/site/PastYearlingsGallery";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { getContentBlocks } from "@/lib/data/settings";
 import { getArchivedHorses } from "@/lib/data/horses";
-import type { PageFeature } from "@/lib/supabase/types";
+import type { PageFeature, SiteContentBlock } from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
   title: "Yearling Preparation",
@@ -14,13 +14,14 @@ export const metadata: Metadata = {
 };
 
 export default async function YearlingPreparationPage() {
+  const emptyBlocks: Record<string, SiteContentBlock> = {};
   const [blocks, archivedHorses] = await Promise.all([
     getContentBlocks([
       "yearling_intro",
       "yearling_sale_preparation",
       "yearling_handling_education",
       "yearling_presentation",
-    ]),
+    ]).catch(() => emptyBlocks),
     getArchivedHorses().catch(() => []),
   ]);
 
