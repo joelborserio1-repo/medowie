@@ -62,7 +62,16 @@ If deploying via a git-connected Worker in the Cloudflare dashboard rather than 
 - **Build command**: `npm run cf:build`
 - Cloudflare's Workers Builds pipeline runs `wrangler deploy` automatically afterwards using
   `wrangler.jsonc`.
-- Set the environment variables above in the dashboard's build/runtime environment settings.
+- Set the environment variables above in the dashboard's build/runtime environment settings — **the
+  `NEXT_PUBLIC_*` ones must be set as *Build* variables specifically, not just *Runtime* variables**.
+  Next.js inlines `NEXT_PUBLIC_*` values as literal strings into the compiled bundle during `next build`
+  (including the middleware bundle) — it does not read them from `process.env` at request time. Workers
+  Builds' dashboard has separate "Build" and "Runtime" sections under Settings → Variables and Secrets;
+  a value only present under Runtime never reaches the build step, so the compiled middleware ends up
+  calling `createServerClient(undefined, undefined, ...)`, which throws synchronously and crashes the
+  whole Worker with a raw "Internal Server Error" for every route the middleware matches (`/admin/*`).
+  After adding/fixing Build variables, trigger a fresh build (not just a redeploy of the existing build
+  output) so `next build` re-runs with them present.
 
 ### Custom domain
 
