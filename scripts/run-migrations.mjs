@@ -19,7 +19,14 @@ const files = readdirSync(migrationsDir)
   .filter((f) => f.endsWith(".sql"))
   .sort();
 
-const client = new pg.Client({ connectionString, ssl: { rejectUnauthorized: false } });
+// Strip any sslmode from the URL so our explicit ssl object (which tolerates
+// Supabase's self-signed pooler cert) is what actually takes effect.
+const cleanConnString = connectionString.replace(/([?&])sslmode=[^&]*/gi, "$1").replace(/[?&]$/, "");
+
+const client = new pg.Client({
+  connectionString: cleanConnString,
+  ssl: { rejectUnauthorized: false, require: true },
+});
 
 async function main() {
   await client.connect();
