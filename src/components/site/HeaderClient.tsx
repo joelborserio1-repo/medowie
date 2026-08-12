@@ -65,8 +65,8 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
           <Link
             href="/"
             className={clsx(
-              "text-[13px] font-medium uppercase tracking-[0.08em] text-charcoal hover:text-orange",
-              pathname === "/" && "text-orange"
+              "relative py-1 text-[13px] font-semibold uppercase tracking-[0.1em] text-charcoal after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-orange after:transition-transform after:duration-200 hover:text-orange hover:after:scale-x-100",
+              pathname === "/" && "text-orange after:scale-x-100"
             )}
           >
             Home
@@ -80,8 +80,8 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
             <button
               type="button"
               className={clsx(
-                "text-[13px] font-medium uppercase tracking-[0.08em] text-charcoal hover:text-orange",
-                pathname.startsWith("/stallions") && "text-orange"
+                "relative py-1 text-[13px] font-semibold uppercase tracking-[0.1em] text-charcoal after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-orange after:transition-transform after:duration-200 hover:text-orange hover:after:scale-x-100",
+                pathname.startsWith("/stallions") && "text-orange after:scale-x-100"
               )}
               aria-expanded={stallionMenuOpen}
               onClick={() => setStallionMenuOpen((v) => !v)}
@@ -118,8 +118,8 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
               key={link.href}
               href={link.href}
               className={clsx(
-                "text-[13px] font-medium uppercase tracking-[0.08em] text-charcoal hover:text-orange",
-                pathname.startsWith(link.href) && "text-orange"
+                "relative py-1 text-[13px] font-semibold uppercase tracking-[0.1em] text-charcoal after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-orange after:transition-transform after:duration-200 hover:text-orange hover:after:scale-x-100",
+                pathname.startsWith(link.href) && "text-orange after:scale-x-100"
               )}
             >
               {link.label}
@@ -150,10 +150,10 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
       {mobileOpen && (
         <div className="border-t border-line bg-warm-white lg:hidden">
           <nav className="flex flex-col px-5 py-4" aria-label="Mobile">
-            <Link href="/" className="border-b border-line py-3 text-sm uppercase tracking-[0.08em]">
+            <Link href="/" className="border-b border-line py-3 text-sm font-semibold uppercase tracking-[0.08em]">
               Home
             </Link>
-            <Link href="/stallions" className="border-b border-line py-3 text-sm uppercase tracking-[0.08em]">
+            <Link href="/stallions" className="border-b border-line py-3 text-sm font-semibold uppercase tracking-[0.08em]">
               Stallions
             </Link>
             {stallions.map((s) => (
@@ -170,7 +170,7 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="border-b border-line py-3 text-sm uppercase tracking-[0.08em]"
+                className="border-b border-line py-3 text-sm font-semibold uppercase tracking-[0.08em]"
               >
                 {link.label}
               </Link>

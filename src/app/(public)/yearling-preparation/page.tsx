@@ -40,13 +40,13 @@ export default async function YearlingPreparationPage() {
           <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
             <div className="max-w-lg whitespace-pre-line text-[16px] leading-relaxed text-charcoal">
               {intro.body}
-              {intro.meta.tagline && (
+              {intro.meta?.tagline && (
                 <p className="mt-6 font-serif text-xl italic text-orange">{intro.meta.tagline}</p>
               )}
             </div>
             <div className="relative aspect-[4/3]">
               <BrandImage src={intro.image_url} alt="Yearling preparation at Medowie Lodge" label="Yearling Preparation" />
-              {intro.meta.years_experience && (
+              {intro.meta?.years_experience && (
                 <div className="absolute right-4 top-4 flex h-24 w-24 flex-col items-center justify-center rounded-full bg-orange text-center text-warm-white shadow-lg">
                   <span className="font-serif text-2xl leading-none">{intro.meta.years_experience}</span>
                   <span className="mt-1 text-[10px] uppercase tracking-[0.06em] leading-tight">
@@ -59,7 +59,7 @@ export default async function YearlingPreparationPage() {
             </div>
           </div>
 
-          {intro.meta.features && intro.meta.features.length > 0 && (
+          {intro.meta?.features && intro.meta.features.length > 0 && (
             <div className="mx-auto mt-10 grid w-full max-w-[1400px] gap-8 px-5 sm:px-8 sm:grid-cols-2 lg:grid-cols-4">
               {intro.meta.features.map((feature: PageFeature) => (
                 <div key={feature.heading}>

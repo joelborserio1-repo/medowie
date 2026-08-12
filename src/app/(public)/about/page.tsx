@@ -38,7 +38,7 @@ export default async function AboutPage() {
           <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
             <div className="max-w-lg whitespace-pre-line text-[16px] leading-relaxed text-charcoal">
               {intro.body}
-              {intro.meta.tagline && (
+              {intro.meta?.tagline && (
                 <p className="mt-6 font-serif text-xl italic text-orange">{intro.meta.tagline}</p>
               )}
             </div>
