@@ -9,13 +9,6 @@ const BANNERS = [
     alt: "Medowie Lodge Stud — quality stallions, chilled and frozen semen available, on-property natural cover, proven results",
   },
   {
-    key: "training",
-    src: "/home/training.webp",
-    width: 1625,
-    height: 968,
-    alt: "Medowie Lodge Training — race day preparation, fitness and conditioning, individual programs, dedication and experience",
-  },
-  {
     key: "yearling",
     src: "/home/yearling-preparation.webp",
     width: 1672,
@@ -30,10 +23,10 @@ export function OperationIntro() {
       <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
         <p className="eyebrow mb-3">The Medowie Lodge Operation</p>
         <h2 className="max-w-xl font-serif text-3xl text-brown sm:text-4xl">
-          Stud, training and preparation under one property.
+          Stud and yearling preparation under one property.
         </h2>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-10 grid gap-6 md:grid-cols-2">
           {BANNERS.map((banner) => (
             <Image
               key={banner.key}

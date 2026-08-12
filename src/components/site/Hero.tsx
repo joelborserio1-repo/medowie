@@ -34,8 +34,7 @@ export function Hero({
           Standardbred Stud &amp; Racing Stables
         </p>
         <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-warm-white/85">
-          Breeding, training and preparing Standardbreds from Medowie in the Hunter Region of New South
-          Wales.
+          Breeding and preparing Standardbreds from Medowie in the Hunter Region of New South Wales.
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
           <Button href="/stallions">View Our Stallions</Button>

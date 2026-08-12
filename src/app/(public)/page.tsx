@@ -86,29 +86,6 @@ export default async function HomePage() {
 
       <section className="border-t border-line py-16 sm:py-24">
         <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
-          <div className="relative aspect-[4/3]">
-            <BrandImage src={null} alt="Race training at Medowie Lodge" label="Race Training" />
-          </div>
-          <div>
-            <p className="eyebrow mb-3">Training</p>
-            <h2 className="font-serif text-3xl text-brown sm:text-4xl">
-              Breaking-in, race training and preparation.
-            </h2>
-            <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-grey">
-              Darren Reay and team at Medowie Lodge provide breaking-in, yearling preparation and race
-              training from the property at Medowie, NSW.
-            </p>
-            <div className="mt-6">
-              <Button href="/training" variant="secondary">
-                View Training Services
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-t border-line py-16 sm:py-24">
-        <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
           <div className="order-2 lg:order-1">
             <p className="eyebrow mb-3">Yearling Preparation</p>
             <h2 className="font-serif text-3xl text-brown sm:text-4xl">

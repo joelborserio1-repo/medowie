@@ -8,7 +8,6 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.medowielodge.co
 const STATIC_ROUTES = [
   "",
   "/stallions",
-  "/training",
   "/yearling-preparation",
   "/horses-for-sale",
   "/about",

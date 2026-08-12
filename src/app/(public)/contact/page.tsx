@@ -6,7 +6,7 @@ import { getSiteSettings } from "@/lib/data/settings";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Contact Medowie Lodge for stallion bookings, training and general enquiries.",
+  description: "Contact Medowie Lodge for stallion bookings and general enquiries.",
   alternates: { canonical: "/contact" },
 };
 
@@ -16,12 +16,6 @@ const ENQUIRY_TYPES = [
     copy: "Stallion bookings, semen orders and breeding questions — contact Darren Reay directly.",
     href: "/book-a-mare",
     cta: "Book a Mare",
-  },
-  {
-    label: "Training Enquiries",
-    copy: "Race training, breaking-in and yearling preparation enquiries.",
-    href: "/training",
-    cta: "Training Enquiry",
   },
   {
     label: "General Enquiries",
@@ -43,7 +37,7 @@ export default async function ContactPage() {
       <PageHero eyebrow="Get in Touch" heading="Contact" />
 
       <section className="border-b border-line py-14">
-        <div className="mx-auto grid w-full max-w-[1400px] gap-8 px-5 sm:px-8 md:grid-cols-3">
+        <div className="mx-auto grid w-full max-w-[1400px] gap-8 px-5 sm:px-8 md:grid-cols-2">
           {ENQUIRY_TYPES.map((type) => (
             <div key={type.label} className="border border-line p-6">
               <h2 className="font-serif text-xl text-brown">{type.label}</h2>

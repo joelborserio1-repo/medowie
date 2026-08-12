@@ -18,8 +18,8 @@ export default async function AdminSiteContentPage() {
     <div>
       <AdminPageHeader title="Site Content" />
       <p className="mb-6 max-w-xl text-sm text-grey">
-        These blocks feed the homepage introduction, About, Training and Yearling Preparation pages. Draft
-        blocks stay hidden from the public site until published.
+        These blocks feed the homepage introduction, About and Yearling Preparation pages. Draft blocks
+        stay hidden from the public site until published.
       </p>
 
       <div className="space-y-4">

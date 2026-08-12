@@ -3,7 +3,6 @@ import { getSiteSettings } from "@/lib/data/settings";
 
 const FOOTER_LINKS = [
   { label: "Stallions", href: "/stallions" },
-  { label: "Training", href: "/training" },
   { label: "Yearling Preparation", href: "/yearling-preparation" },
   { label: "Horses for Sale", href: "/horses-for-sale" },
   { label: "Forms & Contracts", href: "/forms" },
