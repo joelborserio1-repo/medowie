@@ -29,7 +29,7 @@ Copy `cms/.env.example` to `cms/.env`:
 | `DATABASE_URL` | Production | Full Postgres connection string. Railway's Postgres plugin injects this automatically when attached to the CMS service. |
 | `DATABASE_SSL` / `DATABASE_SSL_REJECT_UNAUTHORIZED` | Production | Set `DATABASE_SSL=true` for Railway Postgres; `DATABASE_SSL_REJECT_UNAUTHORIZED=false` if it uses a self-signed cert. |
 | `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_PUBLIC_URL` | Production (recommended) | Switches the media upload provider from local disk to Cloudflare R2. Required in practice on Railway, since its filesystem is ephemeral and uploaded photos/PDFs would be lost on redeploy without it. |
-| `STRAPI_ADMIN_EMAIL`, `STRAPI_ADMIN_PASSWORD` | Local/dev only | Auto-creates the first admin user on boot via `cms/src/bootstrap/create-first-admin.ts`. **Never set these in production** — create production admins by hand (see `docs/ADMIN_GUIDE.md`). |
+| `STRAPI_ADMIN_EMAIL`, `STRAPI_ADMIN_PASSWORD`, `STRAPI_ADMIN_FIRSTNAME`, `STRAPI_ADMIN_LASTNAME` | Local/dev only | Auto-creates the first admin user on boot via `cms/src/bootstrap/create-first-admin.ts`. Strapi hard-codes its admin password policy (8+ characters, at least one uppercase, one lowercase, one digit) and logs in by **email**, not a plain username — so a literal `user` / `000` login isn't possible. The closest practical equivalent is seeded locally: email `user@medowielodge.test`, password `User00000000`. **Never set these in production** — create production admins by hand (see `docs/ADMIN_GUIDE.md`). |
 
 ### Where the enquiry notification email address lives
 

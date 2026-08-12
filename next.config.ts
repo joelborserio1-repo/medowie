@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
       // Cloudflare R2 media (if the Strapi upload provider is switched to R2 — see docs/DEPLOYMENT.md).
       { protocol: "https", hostname: "*.r2.dev" },
       { protocol: "https", hostname: "*.r2.cloudflarestorage.com" },
+      // YouTube video thumbnails for the stallion media carousel.
+      { protocol: "https", hostname: "img.youtube.com" },
     ],
   },
   async redirects() {

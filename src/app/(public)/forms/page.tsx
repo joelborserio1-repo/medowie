@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/site/PageHero";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { formatDate } from "@/lib/format";
-import { mediaUrl } from "@/lib/cms/media";
+import { FormDocumentRow } from "@/components/site/FormDocumentRow";
 import { getDocumentsByCategory } from "@/lib/data/documents";
 import { getSiteSettings } from "@/lib/data/settings";
 import type { DocumentCategory, FormDocument } from "@/lib/cms/types";
@@ -50,22 +49,7 @@ export default async function FormsPage() {
                     <h2 className="font-serif text-2xl text-brown">{category}</h2>
                     <ul className="mt-4 divide-y divide-line border-y border-line">
                       {docs.map((doc) => (
-                        <li key={doc.id} className="flex flex-wrap items-center justify-between gap-2 py-4">
-                          <div>
-                            <p className="text-sm font-semibold text-charcoal">{doc.title}</p>
-                            <p className="mt-0.5 text-xs text-grey">
-                              {[doc.season, doc.description, doc.updatedAt ? `Updated ${formatDate(doc.updatedAt)}` : null]
-                                .filter(Boolean)
-                                .join(" · ")}
-                            </p>
-                          </div>
-                          <a
-                            href={mediaUrl(doc.file)!}
-                            className="text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline"
-                          >
-                            Download →
-                          </a>
-                        </li>
+                        <FormDocumentRow key={doc.id} doc={doc} />
                       ))}
                     </ul>
                   </div>

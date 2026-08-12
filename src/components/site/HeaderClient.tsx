@@ -54,9 +54,9 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/brand/medowie-lodge-logo.png"
-            alt="Medowie Lodge — Harness Racing"
-            width={762}
-            height={380}
+            alt="Medowie Lodge"
+            width={1536}
+            height={1024}
             priority
             className="h-10 w-auto sm:h-12"
           />

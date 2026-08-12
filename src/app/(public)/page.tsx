@@ -4,6 +4,7 @@ import { ResultsList } from "@/components/site/ResultsList";
 import { NewsList } from "@/components/site/NewsList";
 import { ContactCta } from "@/components/site/ContactCta";
 import { HorsesForSalePreview } from "@/components/site/HorsesForSalePreview";
+import { FacebookFeed } from "@/components/site/FacebookFeed";
 import { StallionCard } from "@/components/stallions/StallionCard";
 import { FeaturedStallion } from "@/components/stallions/FeaturedStallion";
 import { Button } from "@/components/ui/Button";
@@ -138,6 +139,7 @@ export default async function HomePage() {
 
       <ResultsList results={results} />
       <NewsList articles={news} />
+      <FacebookFeed facebookUrl={settings?.facebookUrl} />
 
       <ContactCta settings={settings} />
     </>
