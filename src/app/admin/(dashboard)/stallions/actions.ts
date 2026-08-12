@@ -42,6 +42,7 @@ export async function upsertStallion(formData: FormData) {
     dam: str(formData, "dam"),
     damsire: str(formData, "damsire"),
     service_fee: num(formData, "service_fee"),
+    service_fee_nz: num(formData, "service_fee_nz"),
     fee_notes: str(formData, "fee_notes"),
     includes_gst: formData.get("includes_gst") === "on",
     mile_rate: str(formData, "mile_rate"),
@@ -70,13 +71,29 @@ export async function upsertStallion(formData: FormData) {
 
   let stallionId = id;
 
+  // `service_fee_nz` may not exist yet on the live database. If Postgres/PostgREST
+  // rejects it as an unknown column, transparently retry without it so saving a
+  // stallion never breaks — the NZ fee simply won't persist until the column exists.
+  const isMissingNzColumn = (message: string | undefined) =>
+    Boolean(message && /service_fee_nz/.test(message) && /(column|schema cache|does not exist)/i.test(message));
+
   if (id) {
-    const { error } = await supabase.from("stallions").update(record).eq("id", id);
+    let { error } = await supabase.from("stallions").update(record).eq("id", id);
+    if (error && isMissingNzColumn(error.message)) {
+      const { service_fee_nz: _omit, ...rest } = record;
+      void _omit;
+      ({ error } = await supabase.from("stallions").update(rest).eq("id", id));
+    }
     if (error) throw error;
   } else {
-    const { data, error } = await supabase.from("stallions").insert(record).select("id").single();
+    let { data, error } = await supabase.from("stallions").insert(record).select("id").single();
+    if (error && isMissingNzColumn(error.message)) {
+      const { service_fee_nz: _omit, ...rest } = record;
+      void _omit;
+      ({ data, error } = await supabase.from("stallions").insert(rest).select("id").single());
+    }
     if (error) throw error;
-    stallionId = data.id;
+    stallionId = data!.id;
   }
 
   revalidatePath("/admin/stallions");

@@ -74,7 +74,12 @@ export default async function StallionProfilePage({ params }: { params: Promise<
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(offerJsonLd) }} />
       )}
 
-      <StallionHero stallion={stallion} />
+      <StallionHero
+        stallion={stallion}
+        gallery={gallery}
+        hasVideos={videos.length > 0}
+        hasDocuments={documents.length > 0}
+      />
       <QuickStats stallion={stallion} />
 
       {stallion.full_biography && (
@@ -115,10 +120,10 @@ export default async function StallionProfilePage({ params }: { params: Promise<
         </section>
       )}
 
-      <MediaGallery gallery={gallery} videos={videos} />
+      <MediaGallery gallery={[]} videos={videos} sectionId="videos" eyebrow="Replays" heading="Videos & Replays" />
 
       {documents.length > 0 && (
-        <section className="border-b border-line py-14">
+        <section id="forms" className="scroll-mt-24 border-b border-line py-14">
           <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
             <p className="eyebrow mb-3">Forms &amp; Contracts</p>
             <h2 className="font-serif text-3xl text-brown">Documents</h2>

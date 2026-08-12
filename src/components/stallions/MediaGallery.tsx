@@ -16,9 +16,15 @@ type Slide =
 export function MediaGallery({
   gallery,
   videos,
+  sectionId,
+  eyebrow = "Gallery",
+  heading = "Media",
 }: {
   gallery: StallionGalleryImage[];
   videos: StallionVideo[];
+  sectionId?: string;
+  eyebrow?: string;
+  heading?: string;
 }) {
   const imageSlides: Slide[] = gallery.map((img) => ({
     kind: "image" as const,
@@ -51,10 +57,10 @@ export function MediaGallery({
   const goTo = (i: number) => setActive((i + slides.length) % slides.length);
 
   return (
-    <section className="border-b border-line py-14">
+    <section id={sectionId} className="scroll-mt-24 border-b border-line py-14">
       <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
-        <p className="eyebrow mb-3">Gallery</p>
-        <h2 className="font-serif text-3xl text-brown">Media</h2>
+        <p className="eyebrow mb-3">{eyebrow}</p>
+        <h2 className="font-serif text-3xl text-brown">{heading}</h2>
 
         <div className="relative mt-8 aspect-video bg-charcoal">
           {current.kind === "image" ? (

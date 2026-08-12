@@ -44,6 +44,12 @@ export interface Stallion {
   damsire: string | null;
 
   service_fee: number | null;
+  /**
+   * Optional New Zealand service fee (NZD). May be absent if the underlying
+   * column has not been added to the database yet — code paths must treat it
+   * as optional.
+   */
+  service_fee_nz?: number | null;
   fee_notes: string | null;
   includes_gst: boolean;
 
