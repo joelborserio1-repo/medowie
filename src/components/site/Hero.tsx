@@ -9,7 +9,7 @@ export function Hero({ imageUrl }: { imageUrl?: string | null }) {
             video sits on top at full opacity so this never shows through once it's playing. */}
         <BrandImage src={imageUrl} alt="Medowie Lodge" label="Medowie Lodge" className="opacity-90" />
         <video
-          className="absolute inset-0 h-full w-full object-contain motion-reduce:hidden"
+          className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
           autoPlay
           muted
           loop
