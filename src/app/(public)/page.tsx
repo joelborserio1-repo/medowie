@@ -14,6 +14,7 @@ import { getAvailableHorses } from "@/lib/data/horses";
 import { getLatestResults } from "@/lib/data/results";
 import { getLatestNews } from "@/lib/data/news";
 import { getHomepage, getSiteSettings } from "@/lib/data/settings";
+import { mediaUrl } from "@/lib/cms/media";
 
 export default async function HomePage() {
   const [stallions, featured, horses, results, news, intro, settings] = await Promise.all([
@@ -30,7 +31,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero />
+      <Hero
+        videoUrl={mediaUrl(intro?.heroVideo)}
+        videoStartSeconds={intro?.heroVideoStartSeconds}
+        videoEndSeconds={intro?.heroVideoEndSeconds}
+      />
 
       {intro?.introBody && (
         <section className="py-16 sm:py-24">

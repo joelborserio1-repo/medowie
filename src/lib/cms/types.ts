@@ -234,6 +234,9 @@ export interface SiteSettings {
 export interface Homepage {
   introHeading: string | null;
   introBody: string | null;
+  heroVideo: StrapiMedia | null;
+  heroVideoStartSeconds: number | null;
+  heroVideoEndSeconds: number | null;
 }
 
 export interface AboutPage {

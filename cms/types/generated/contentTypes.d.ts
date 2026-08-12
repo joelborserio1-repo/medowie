@@ -645,6 +645,9 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    heroVideo: Schema.Attribute.Media<'videos'>;
+    heroVideoEndSeconds: Schema.Attribute.Decimal;
+    heroVideoStartSeconds: Schema.Attribute.Decimal;
     introBody: Schema.Attribute.Text;
     introHeading: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;

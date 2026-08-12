@@ -13,6 +13,9 @@
   "pluginOptions": {},
   "attributes": {
     "introHeading": { "type": "string" },
-    "introBody": { "type": "text" }
+    "introBody": { "type": "text" },
+    "heroVideo": { "type": "media", "multiple": false, "allowedTypes": ["videos"] },
+    "heroVideoStartSeconds": { "type": "decimal" },
+    "heroVideoEndSeconds": { "type": "decimal" }
   }
 }

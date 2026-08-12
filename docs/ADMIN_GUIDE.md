@@ -66,6 +66,12 @@ Each of these pages has its own single type with one field per section (e.g. Tra
 body field blank to hide that section on the public page entirely, rather than showing a half-written
 placeholder.
 
+**Homepage hero video** — upload a clip to **Hero Video** to replace the background video on the
+homepage (falls back to the built-in default video if left empty). **Hero Video Start Seconds** /
+**Hero Video End Seconds** trim which part of the clip plays — leave End blank to play to the end of
+the file. The player seeks to the start point on load and jumps back to it once it reaches the end
+point, looping just that section rather than the whole clip.
+
 ## Media Library
 
 **Media Library** in the sidebar lists every uploaded file, independent of which content record uses

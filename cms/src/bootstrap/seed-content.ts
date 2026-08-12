@@ -86,13 +86,28 @@ async function seedSiteSettings(strapi: Core.Strapi) {
 
 async function seedHomepage(strapi: Core.Strapi) {
   const existing = await strapi.query('api::homepage.homepage').findOne({});
-  if (existing?.introBody) return;
+
+  if (existing?.introBody) {
+    // Already seeded on a previous boot — just backfill the hero video trim
+    // point if it's not set yet, without touching anything staff may have
+    // since edited (introBody, uploaded video, etc.).
+    if (existing.heroVideoStartSeconds == null) {
+      await strapi
+        .query('api::homepage.homepage')
+        .update({ where: { id: existing.id }, data: { heroVideoStartSeconds: 12 } });
+      strapi.log.info('Backfilled hero video start time (12s).');
+    }
+    return;
+  }
 
   const data = {
     introHeading: 'Medowie Lodge',
     introBody:
       'Welcome to Medowie Lodge, a Standardbred stud located at Medowie in the Port Stephens area of the Hunter Region, New South Wales.\n\n' +
       'Medowie Lodge is run by Darren Reay and family. Darren is a licensed Harness Racing trainer, studmaster, breeder and owner, and Vice President of Harness Breeders NSW.',
+    // The uploaded hero clip has a slow first ~12s; staff can retune this
+    // (and heroVideoEndSeconds) in Strapi admin under Homepage.
+    heroVideoStartSeconds: 12,
   };
 
   if (existing) {

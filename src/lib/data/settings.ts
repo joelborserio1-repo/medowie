@@ -6,7 +6,7 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
 }
 
 export async function getHomepage(): Promise<Homepage | null> {
-  return strapiFindOne<Homepage>("/homepage");
+  return strapiFindOne<Homepage>("/homepage", { populate: "*" });
 }
 
 export async function getAboutPage(): Promise<AboutPage | null> {
