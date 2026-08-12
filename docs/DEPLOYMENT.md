@@ -1,32 +1,12 @@
 # Deployment
 
-Two separate deploys: the Strapi CMS to Railway, then the Next.js frontend to Cloudflare Workers
-pointed at it. Deploy the CMS first — the frontend build needs a reachable `STRAPI_URL` to fetch content
-at build time.
+One deploy: the Next.js frontend to Cloudflare Workers, talking directly to a Supabase project (no
+separate CMS service to stand up or keep alive).
 
-## 1. Strapi CMS → Railway
+## 1. Supabase project
 
-1. Create a new Railway project, add a service from this repo, and set its **Root Directory** to `cms/`.
-2. Railway will detect `cms/Dockerfile` (via `cms/railway.json`) and build with it. No extra build
-   command needed.
-3. Add a **Postgres** plugin to the project and attach it to the CMS service — Railway injects
-   `DATABASE_URL` automatically. Set `DATABASE_CLIENT=postgres`, `DATABASE_SSL=true`, and
-   `DATABASE_SSL_REJECT_UNAUTHORIZED=false` on the service.
-4. Set the Strapi secrets (`APP_KEYS`, `API_TOKEN_SALT`, `ADMIN_JWT_SECRET`, `TRANSFER_TOKEN_SALT`,
-   `JWT_SECRET`, `ENCRYPTION_KEY`) — generate real values, see [`STRAPI_SETUP.md`](./STRAPI_SETUP.md).
-   **Do not** set `STRAPI_ADMIN_EMAIL`/`STRAPI_ADMIN_PASSWORD` here — create the production admin by
-   hand once the service is up (Strapi will prompt at `/admin` on first visit).
-5. Set up Cloudflare R2 for media (recommended — Railway's filesystem doesn't persist uploads across
-   redeploys):
-   - Create an R2 bucket in the Cloudflare dashboard (e.g. `medowie-lodge-media`).
-   - Create an R2 API token (Account API token, with R2 read/write) for `R2_ACCESS_KEY_ID` /
-     `R2_SECRET_ACCESS_KEY`.
-   - Either enable the bucket's public `r2.dev` URL or map a custom domain (e.g.
-     `media.medowielodge.com.au`) to it, and set that as `R2_PUBLIC_URL`.
-   - Set `R2_ACCOUNT_ID` and `R2_BUCKET` too.
-6. Deploy. Once it's up, visit `https://<your-railway-url>/admin` and create the first admin account.
-7. (Optional) Map a custom domain to the Railway service — e.g. `cms.medowielodge.com.au` — via
-   Railway's domain settings, with a CNAME added in Cloudflare DNS.
+Set this up first — see [`SUPABASE_SETUP.md`](./SUPABASE_SETUP.md) for the full walkthrough (create the
+project, run the SQL migrations in order, upload the seed photos, create the first admin account).
 
 ## 2. Next.js frontend → Cloudflare Workers
 
@@ -45,17 +25,20 @@ npx wrangler r2 bucket create medowie-lodge-opennext-cache   # ISR/data cache bu
 Build-time (`NEXT_PUBLIC_*` vars get inlined into the client bundle by `next build`, so these must be
 present wherever the build runs — locally, in CI, or in Cloudflare's Workers Builds):
 
-- `NEXT_PUBLIC_STRAPI_URL` — the CMS's public URL, e.g. `https://cms.medowielodge.com.au`
+- `NEXT_PUBLIC_SUPABASE_URL` — your Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` — the project's public anon key
 - `NEXT_PUBLIC_SITE_URL` — this site's own URL, e.g. `https://www.medowielodge.com.au`
 
 Runtime secrets (set with `wrangler secret put <NAME>`, not in `wrangler.jsonc`):
 
 ```bash
-npx wrangler secret put STRAPI_URL              # same value as NEXT_PUBLIC_STRAPI_URL
-npx wrangler secret put STRAPI_API_TOKEN        # optional
-npx wrangler secret put RESEND_API_KEY          # optional
-npx wrangler secret put RESEND_FROM_EMAIL       # optional
+npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY   # only if a server-only route needs it (e.g. scripts run outside the Worker)
+npx wrangler secret put RESEND_API_KEY              # optional
+npx wrangler secret put RESEND_FROM_EMAIL           # optional
 ```
+
+The Supabase anon key is safe in the client bundle by design — Row Level Security is what actually
+restricts what it can read and write (see [`SUPABASE_SETUP.md`](./SUPABASE_SETUP.md#5-row-level-security-summary)).
 
 ### Deploy
 
@@ -75,8 +58,7 @@ the real production domain once you have one.
 
 If deploying via a git-connected Worker in the Cloudflare dashboard rather than local `wrangler`:
 
-- **Root directory**: `/` (the Next.js app lives at the repo root; `cms/` is the separate Strapi app —
-  don't point Railway-style builds at this repo's root).
+- **Root directory**: `/`
 - **Build command**: `npm run cf:build`
 - Cloudflare's Workers Builds pipeline runs `wrangler deploy` automatically afterwards using
   `wrangler.jsonc`.
@@ -88,12 +70,12 @@ Add the Worker's route in the Cloudflare dashboard (Workers & Pages → your Wor
 Domains), e.g. `www.medowielodge.com.au`. Update `NEXT_PUBLIC_SITE_URL` and `wrangler.jsonc`'s
 `vars.NEXT_PUBLIC_SITE_URL` to match.
 
-## 3. After both are deployed
+## 3. After deploying
 
-1. Confirm the frontend can reach the CMS: visit the homepage and check the "Current Stallions" section
-   isn't stuck on the empty-state message (it will be, correctly, until staff publish a stallion).
-2. Log into Strapi admin, review the seeded content described in
+1. Confirm the frontend can reach Supabase: visit the homepage and check the "Current Stallions"
+   section isn't stuck on the empty-state message (it will be, correctly, until staff publish a
+   stallion).
+2. Sign in at `/admin`, review the seeded content described in
    [`CONTENT_MIGRATION.md`](./CONTENT_MIGRATION.md), and start publishing real content — see
    [`ADMIN_GUIDE.md`](./ADMIN_GUIDE.md).
-3. Submit a test enquiry through the live site and confirm it appears in Strapi admin under Content
-   Manager → Enquiry.
+3. Submit a test enquiry through the live site and confirm it appears under **Admin → Enquiries**.

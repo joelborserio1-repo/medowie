@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { mediaUrl, type StrapiMedia } from "@/lib/cms/media";
-import type { StallionVideo } from "@/lib/cms/types";
+import type { StallionGalleryImage, StallionVideo } from "@/lib/supabase/types";
 
 function youtubeId(url: string): string | null {
   const match = url.match(/(?:youtu\.be\/|v=)([\w-]{11})/);
@@ -14,15 +13,23 @@ type Slide =
   | { kind: "image"; key: string; src: string; alt: string; thumb: string }
   | { kind: "video"; key: string; embedUrl: string; title: string; thumb: string };
 
-export function MediaGallery({ gallery, videos }: { gallery: StrapiMedia[]; videos: StallionVideo[] }) {
-  const imageSlides: Slide[] = gallery.flatMap((img) => {
-    const src = mediaUrl(img);
-    if (!src) return [];
-    return [{ kind: "image" as const, key: `img-${img.id}`, src, alt: img.alternativeText ?? "", thumb: src }];
-  });
+export function MediaGallery({
+  gallery,
+  videos,
+}: {
+  gallery: StallionGalleryImage[];
+  videos: StallionVideo[];
+}) {
+  const imageSlides: Slide[] = gallery.map((img) => ({
+    kind: "image" as const,
+    key: `img-${img.id}`,
+    src: img.image_url,
+    alt: img.alt_text ?? "",
+    thumb: img.image_url,
+  }));
 
   const videoSlides: Slide[] = videos.flatMap((v) => {
-    const id = youtubeId(v.youtubeUrl);
+    const id = youtubeId(v.youtube_url);
     if (!id) return [];
     return [
       {

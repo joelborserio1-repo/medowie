@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 /**
  * Plays a looping background video clipped to [startSeconds, endSeconds] —
- * both editable from Strapi admin (Homepage → Hero Video). Native <video>
+ * both editable from /admin (Homepage → Hero Video). Native <video>
  * has no built-in trim, so this seeks to the start point once metadata is
  * ready and jumps back to it whenever playback reaches the end point,
  * instead of looping the whole file.

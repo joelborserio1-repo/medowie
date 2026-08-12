@@ -4,7 +4,6 @@ import { PageHero } from "@/components/site/PageHero";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatDate } from "@/lib/format";
-import { mediaUrl } from "@/lib/cms/media";
 import { getAllNews } from "@/lib/data/news";
 
 export const metadata: Metadata = {
@@ -29,11 +28,11 @@ export default async function NewsIndexPage() {
               {articles.map((article) => (
                 <Link key={article.id} href={`/news/${article.slug}`} className="group block">
                   <div className="relative aspect-[4/3]">
-                    <BrandImage src={mediaUrl(article.heroImage)} alt={article.title} label={article.title} />
+                    <BrandImage src={article.hero_image_url} alt={article.title} label={article.title} />
                   </div>
                   {article.category && <p className="eyebrow mt-4 text-[10px]">{article.category}</p>}
                   <h2 className="mt-1.5 font-serif text-lg text-brown group-hover:underline">{article.title}</h2>
-                  {article.publishedDate && <p className="mt-1 text-xs text-grey">{formatDate(article.publishedDate)}</p>}
+                  {article.published_date && <p className="mt-1 text-xs text-grey">{formatDate(article.published_date)}</p>}
                 </Link>
               ))}
             </div>

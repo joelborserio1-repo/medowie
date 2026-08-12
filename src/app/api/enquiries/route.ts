@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 import { enquirySchema } from "@/lib/validation/enquiry";
 import { sendEnquiryEmails } from "@/lib/email/send";
-import { strapiFindOne } from "@/lib/cms/client";
-import type { SiteSettings } from "@/lib/cms/types";
-
-const STRAPI_URL = process.env.STRAPI_URL ?? "http://localhost:1337";
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
@@ -15,70 +12,63 @@ export async function POST(request: Request) {
   }
 
   const input = parsed.data;
+  const supabase = await createClient();
 
-  const data: Record<string, unknown> = {
+  const row: Record<string, unknown> = {
     type: input.type,
     name: input.name,
     email: input.email,
-    phone: input.phone || null,
-    message: input.message || null,
+    phone: input.phone ?? null,
+    message: input.message ?? null,
   };
 
   if (input.type === "general") {
-    data.subject = input.subject || null;
+    row.subject = input.subject ?? null;
   }
 
   if (input.type === "stallion") {
-    if (input.stallionId) data.stallion = Number(input.stallionId);
-    data.mareName = input.mareName || null;
-    data.mareSire = input.mareSire || null;
-    data.state = input.state || null;
+    row.stallion_id = input.stallionId ?? null;
+    row.mare_name = input.mareName ?? null;
+    row.mare_sire = input.mareSire ?? null;
+    row.state = input.state ?? null;
   }
 
   if (input.type === "book_a_mare") {
-    data.stallion = Number(input.stallionId);
-    data.mareName = input.mareName;
-    data.mareAge = input.mareAge || null;
-    data.mareSire = input.mareSire || null;
-    data.mareDam = input.mareDam || null;
-    data.mareDamsire = input.mareDamsire || null;
-    data.breederOwner = input.breederOwner;
-    data.state = input.state;
-    data.country = input.country || null;
-    data.semenRequirement = input.semenRequirement || null;
-    data.expectedCycleDate = input.expectedCycleDate || null;
+    row.stallion_id = input.stallionId;
+    row.mare_name = input.mareName;
+    row.mare_age = input.mareAge ?? null;
+    row.mare_sire = input.mareSire ?? null;
+    row.mare_dam = input.mareDam ?? null;
+    row.mare_damsire = input.mareDamsire ?? null;
+    row.breeder_owner = input.breederOwner;
+    row.state = input.state;
+    row.country = input.country ?? null;
+    row.semen_requirement = input.semenRequirement ?? null;
+    row.expected_cycle_date = input.expectedCycleDate || null;
   }
 
   if (input.type === "training") {
-    data.horseName = input.horseName || null;
-    data.horseAge = input.horseAge || null;
-    data.horseSex = input.horseSex || null;
-    data.currentLocation = input.currentLocation || null;
-    data.serviceRequired = input.serviceRequired || null;
+    row.horse_name = input.horseName ?? null;
+    row.horse_age = input.horseAge ?? null;
+    row.horse_sex = input.horseSex ?? null;
+    row.current_location = input.currentLocation ?? null;
+    row.service_required = input.serviceRequired ?? null;
   }
 
   if (input.type === "horse_for_sale") {
-    if (input.horseId) data.horse = Number(input.horseId);
+    row.horse_id = input.horseId ?? null;
   }
 
-  const apiToken = process.env.STRAPI_API_TOKEN;
-  const createRes = await fetch(`${STRAPI_URL}/api/enquiries`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(apiToken ? { Authorization: `Bearer ${apiToken}` } : {}),
-    },
-    body: JSON.stringify({ data }),
-  });
+  const { error } = await supabase.from("enquiries").insert(row);
 
-  if (!createRes.ok) {
+  if (error) {
     return NextResponse.json({ success: false, error: "Could not save enquiry. Please try again." }, { status: 500 });
   }
 
-  const settings = await strapiFindOne<SiteSettings>("/site-setting", undefined, 0).catch(() => null);
+  const { data: settings } = await supabase.from("site_settings").select("enquiry_recipient_email").single();
 
   try {
-    await sendEnquiryEmails(input, settings?.enquiryRecipientEmail ?? null);
+    await sendEnquiryEmails(input, settings?.enquiry_recipient_email ?? null);
   } catch {
     // Enquiry is already saved; email delivery is best-effort.
   }

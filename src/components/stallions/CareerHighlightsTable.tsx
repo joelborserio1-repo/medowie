@@ -1,4 +1,4 @@
-import type { StallionHighlight } from "@/lib/cms/types";
+import type { StallionHighlight } from "@/lib/supabase/types";
 
 export function CareerHighlightsTable({ highlights }: { highlights: StallionHighlight[] }) {
   if (highlights.length === 0) return null;

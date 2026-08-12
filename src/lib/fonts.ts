@@ -1,9 +1,9 @@
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Oswald, Inter } from "next/font/google";
 
-export const cormorant = Cormorant_Garamond({
+export const oswald = Oswald({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
-  variable: "--font-cormorant",
+  variable: "--font-oswald",
   display: "swap",
 });
 

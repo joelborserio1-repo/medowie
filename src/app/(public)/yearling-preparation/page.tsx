@@ -3,8 +3,9 @@ import { PageHero } from "@/components/site/PageHero";
 import { ContentSection } from "@/components/site/ContentSection";
 import { PastYearlingsGallery } from "@/components/site/PastYearlingsGallery";
 import { BrandImage } from "@/components/ui/BrandImage";
-import { getYearlingPreparationPage } from "@/lib/data/settings";
+import { getContentBlocks } from "@/lib/data/settings";
 import { getArchivedHorses } from "@/lib/data/horses";
+import type { PageFeature } from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
   title: "Yearling Preparation",
@@ -13,12 +14,18 @@ export const metadata: Metadata = {
 };
 
 export default async function YearlingPreparationPage() {
-  const [page, archivedHorses] = await Promise.all([
-    getYearlingPreparationPage().catch(() => null),
+  const [blocks, archivedHorses] = await Promise.all([
+    getContentBlocks([
+      "yearling_intro",
+      "yearling_sale_preparation",
+      "yearling_handling_education",
+      "yearling_presentation",
+    ]),
     getArchivedHorses().catch(() => []),
   ]);
 
-  const yearlings = archivedHorses.filter((h) => h.saleType === "Yearling Sale");
+  const intro = blocks["yearling_intro"];
+  const yearlings = archivedHorses.filter((h) => h.sale_type === "Yearling Sale");
 
   return (
     <div>
@@ -28,29 +35,33 @@ export default async function YearlingPreparationPage() {
         intro="Preparing and presenting Standardbred yearlings for sale."
       />
 
-      {page?.introBody && (
+      {intro?.body && (
         <section className="border-b border-line py-14">
           <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
             <div className="max-w-lg whitespace-pre-line text-[16px] leading-relaxed text-charcoal">
-              {page.introBody}
-              {page.tagline && (
-                <p className="mt-6 font-serif text-xl italic text-orange">{page.tagline}</p>
+              {intro.body}
+              {intro.meta.tagline && (
+                <p className="mt-6 font-serif text-xl italic text-orange">{intro.meta.tagline}</p>
               )}
             </div>
             <div className="relative aspect-[4/3]">
-              <BrandImage src={null} alt="Yearling preparation at Medowie Lodge" label="Yearling Preparation" />
-              {page.yearsExperience && (
+              <BrandImage src={intro.image_url} alt="Yearling preparation at Medowie Lodge" label="Yearling Preparation" />
+              {intro.meta.years_experience && (
                 <div className="absolute right-4 top-4 flex h-24 w-24 flex-col items-center justify-center rounded-full bg-orange text-center text-warm-white shadow-lg">
-                  <span className="font-serif text-2xl leading-none">{page.yearsExperience}</span>
-                  <span className="mt-1 text-[10px] uppercase tracking-[0.06em] leading-tight">Years<br />Experience</span>
+                  <span className="font-serif text-2xl leading-none">{intro.meta.years_experience}</span>
+                  <span className="mt-1 text-[10px] uppercase tracking-[0.06em] leading-tight">
+                    Years
+                    <br />
+                    Experience
+                  </span>
                 </div>
               )}
             </div>
           </div>
 
-          {page.features && page.features.length > 0 && (
+          {intro.meta.features && intro.meta.features.length > 0 && (
             <div className="mx-auto mt-10 grid w-full max-w-[1400px] gap-8 px-5 sm:px-8 sm:grid-cols-2 lg:grid-cols-4">
-              {page.features.map((feature) => (
+              {intro.meta.features.map((feature: PageFeature) => (
                 <div key={feature.heading}>
                   <p className="font-serif text-lg text-brown">{feature.heading}</p>
                   {feature.body && <p className="mt-1 text-sm text-charcoal">{feature.body}</p>}
@@ -61,13 +72,21 @@ export default async function YearlingPreparationPage() {
         </section>
       )}
 
-      <ContentSection heading={page?.salePreparationHeading} body={page?.salePreparationBody} eyebrow="Sale Preparation" />
       <ContentSection
-        heading={page?.handlingEducationHeading}
-        body={page?.handlingEducationBody}
+        heading={blocks["yearling_sale_preparation"]?.heading}
+        body={blocks["yearling_sale_preparation"]?.body}
+        eyebrow="Sale Preparation"
+      />
+      <ContentSection
+        heading={blocks["yearling_handling_education"]?.heading}
+        body={blocks["yearling_handling_education"]?.body}
         eyebrow="Handling & Education"
       />
-      <ContentSection heading={page?.presentationHeading} body={page?.presentationBody} eyebrow="Presentation" />
+      <ContentSection
+        heading={blocks["yearling_presentation"]?.heading}
+        body={blocks["yearling_presentation"]?.body}
+        eyebrow="Presentation"
+      />
 
       <section className="py-14">
         <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">

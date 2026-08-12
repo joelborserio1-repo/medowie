@@ -3,13 +3,13 @@ import { notFound } from "next/navigation";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { HorseEnquiryForm } from "@/components/forms/HorseEnquiryForm";
 import { formatCurrency, formatDate } from "@/lib/format";
-import { mediaUrl } from "@/lib/cms/media";
 import { getHorseBySlug } from "@/lib/data/horses";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const horse = await getHorseBySlug(slug).catch(() => null);
-  if (!horse) return {};
+  const detail = await getHorseBySlug(slug).catch(() => null);
+  if (!detail) return {};
+  const { horse } = detail;
   return {
     title: horse.name,
     description: horse.description ?? `${horse.name} — for sale at Medowie Lodge.`,
@@ -19,46 +19,47 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function HorseForSalePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const horse = await getHorseBySlug(slug).catch(() => null);
-  if (!horse) notFound();
+  const detail = await getHorseBySlug(slug).catch(() => null);
+  if (!detail) notFound();
+  const { horse, gallery } = detail;
 
   const details = [
-    { label: "Sale Type", value: horse.saleType },
+    { label: "Sale Type", value: horse.sale_type },
     { label: "Sex", value: horse.sex },
     { label: "Gait", value: horse.gait },
-    { label: "Foaled", value: horse.yearFoaled ? String(horse.yearFoaled) : null },
+    { label: "Foaled", value: horse.year_foaled ? String(horse.year_foaled) : null },
     { label: "Colour", value: horse.colour },
     { label: "Sire", value: horse.sire },
     { label: "Dam", value: horse.dam },
     { label: "Damsire", value: horse.damsire },
     { label: "Location", value: horse.location },
-    { label: "Sale", value: horse.saleName },
-    { label: "Lot Number", value: horse.lotNumber },
-    { label: "Sale Date", value: formatDate(horse.saleDate) },
+    { label: "Sale", value: horse.sale_name },
+    { label: "Lot Number", value: horse.lot_number },
+    { label: "Sale Date", value: formatDate(horse.sale_date) },
   ].filter((d) => d.value);
 
-  const pedigreeUrl = mediaUrl(horse.pedigreeDocument);
+  const pedigreeUrl = horse.pedigree_document_url;
 
   return (
     <div>
       <section className="relative aspect-[16/9] max-h-[560px] w-full sm:aspect-[21/9]">
-        <BrandImage src={mediaUrl(horse.heroImage)} alt={horse.name} label={horse.name} priority />
-        {horse.state !== "available" && (
+        <BrandImage src={horse.hero_image_url} alt={horse.name} label={horse.name} priority />
+        {horse.status !== "available" && (
           <span className="absolute right-5 top-5 bg-charcoal px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-warm-white">
-            {horse.state === "sold" ? "Sold" : horse.state === "under_offer" ? "Under Offer" : horse.state}
+            {horse.status === "sold" ? "Sold" : horse.status === "under_offer" ? "Under Offer" : horse.status}
           </span>
         )}
       </section>
 
       <section className="border-b border-line py-10">
         <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
-          <p className="eyebrow mb-2">{horse.saleType}</p>
+          <p className="eyebrow mb-2">{horse.sale_type}</p>
           <h1 className="font-serif text-4xl text-brown sm:text-5xl">{horse.name}</h1>
           <p className="mt-3 text-xl font-semibold text-charcoal">
-            {horse.priceType === "poa"
+            {horse.price_type === "poa"
               ? "POA"
-              : horse.state === "sold" && horse.showSoldPrice
-                ? `Sold — ${formatCurrency(horse.soldPrice)}`
+              : horse.status === "sold" && horse.show_sold_price
+                ? `Sold — ${formatCurrency(horse.sold_price)}`
                 : formatCurrency(horse.price) ?? "POA"}
           </p>
         </div>
@@ -82,31 +83,31 @@ export default async function HorseForSalePage({ params }: { params: Promise<{ s
               ))}
             </dl>
 
-            {(pedigreeUrl || horse.externalCatalogueUrl || horse.videoUrl) && (
+            {(pedigreeUrl || horse.external_catalogue_url || horse.video_url) && (
               <div className="mt-8 flex flex-wrap gap-4">
                 {pedigreeUrl && (
                   <a href={pedigreeUrl} className="text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline">
                     Pedigree →
                   </a>
                 )}
-                {horse.externalCatalogueUrl && (
-                  <a href={horse.externalCatalogueUrl} className="text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline">
+                {horse.external_catalogue_url && (
+                  <a href={horse.external_catalogue_url} className="text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline">
                     Catalogue →
                   </a>
                 )}
-                {horse.videoUrl && (
-                  <a href={horse.videoUrl} className="text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline">
+                {horse.video_url && (
+                  <a href={horse.video_url} className="text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline">
                     Video →
                   </a>
                 )}
               </div>
             )}
 
-            {horse.gallery.length > 0 && (
+            {gallery.length > 0 && (
               <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
-                {horse.gallery.map((img) => (
+                {gallery.map((img) => (
                   <div key={img.id} className="relative aspect-square">
-                    <BrandImage src={mediaUrl(img)} alt={img.alternativeText ?? horse.name} />
+                    <BrandImage src={img.image_url} alt={img.alt_text ?? horse.name} />
                   </div>
                 ))}
               </div>
@@ -114,8 +115,8 @@ export default async function HorseForSalePage({ params }: { params: Promise<{ s
           </div>
 
           <div>
-            {horse.state === "available" || horse.state === "under_offer" || horse.state === "upcoming" ? (
-              <HorseEnquiryForm horseId={String(horse.id)} horseName={horse.name} />
+            {horse.status === "available" || horse.status === "under_offer" || horse.status === "upcoming" ? (
+              <HorseEnquiryForm horseId={horse.id} horseName={horse.name} />
             ) : (
               <div className="border border-line bg-parchment p-6 text-sm text-grey">
                 This horse is no longer available. Contact Medowie Lodge about future listings.

@@ -1,5 +1,5 @@
 import { formatDate } from "@/lib/format";
-import type { Result } from "@/lib/cms/types";
+import type { Result } from "@/lib/supabase/types";
 
 export function ResultsList({ results }: { results: Result[] }) {
   if (results.length === 0) return null;

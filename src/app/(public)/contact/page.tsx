@@ -33,7 +33,7 @@ const ENQUIRY_TYPES = [
 
 export default async function ContactPage() {
   const settings = await getSiteSettings().catch(() => null);
-  const address = [settings?.addressLine1, settings?.addressLine2, settings?.suburb, settings?.state, settings?.postcode]
+  const address = [settings?.address_line1, settings?.address_line2, settings?.suburb, settings?.state, settings?.postcode]
     .filter(Boolean)
     .join(", ");
   const mapQuery = address ? encodeURIComponent(`Medowie Lodge, ${address}, Australia`) : null;
@@ -98,8 +98,8 @@ export default async function ContactPage() {
               )}
             </div>
 
-            {settings?.facebookUrl && (
-              <a href={settings.facebookUrl} target="_blank" rel="noreferrer" className="mt-6 inline-block text-sm font-semibold text-orange hover:underline">
+            {settings?.facebook_url && (
+              <a href={settings.facebook_url} target="_blank" rel="noreferrer" className="mt-6 inline-block text-sm font-semibold text-orange hover:underline">
                 Facebook →
               </a>
             )}

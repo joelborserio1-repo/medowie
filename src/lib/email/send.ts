@@ -21,7 +21,7 @@ function renderRows(input: EnquiryInput): string {
 /**
  * Sends the admin notification + customer acknowledgement via Resend when
  * configured. If RESEND_API_KEY is absent, this is a no-op — the enquiry
- * has already been saved to Strapi by the caller regardless.
+ * has already been saved to Supabase by the caller regardless.
  */
 export async function sendEnquiryEmails(input: EnquiryInput, recipientEmail: string | null) {
   const apiKey = process.env.RESEND_API_KEY;

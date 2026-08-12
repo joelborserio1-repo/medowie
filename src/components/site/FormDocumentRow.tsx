@@ -1,12 +1,11 @@
 import { formatDate } from "@/lib/format";
-import { mediaUrl } from "@/lib/cms/media";
-import type { FormDocument } from "@/lib/cms/types";
+import type { DocumentRecord } from "@/lib/supabase/types";
 
-export function FormDocumentRow({ doc }: { doc: FormDocument }) {
-  const fileUrl = mediaUrl(doc.file)!;
-  const isPdf = doc.file?.mime === "application/pdf";
+export function FormDocumentRow({ doc }: { doc: DocumentRecord }) {
+  const fileUrl = doc.file_url;
+  const isPdf = fileUrl.toLowerCase().split("?")[0].endsWith(".pdf");
 
-  const meta = [doc.season, doc.description, doc.updatedAt ? `Updated ${formatDate(doc.updatedAt)}` : null]
+  const meta = [doc.season, doc.description, doc.updated_at ? `Updated ${formatDate(doc.updated_at)}` : null]
     .filter(Boolean)
     .join(" · ");
 

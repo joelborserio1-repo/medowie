@@ -3,23 +3,16 @@
 Website and CMS for Medowie Lodge, a Standardbred stud and harness racing stable at Medowie, NSW,
 operated by Darren Reay and family.
 
-Two apps in this repo:
-
-- **`/`** — the public Next.js site (App Router, TypeScript, Tailwind CSS), deployed to **Cloudflare
-  Workers**.
-- **`/cms`** — a **Strapi** headless CMS (TypeScript) that is the single source of content: stallions,
-  horses for sale, news, results, forms & contracts, enquiries, page copy and site settings. Deployed to
-  **Railway** (or any Docker host — see `cms/Dockerfile`).
-
-Content editors work entirely in Strapi's own admin panel (`/admin` on the CMS's URL) — there is no
-custom admin UI in the Next.js app.
+One app: the public Next.js site (App Router, TypeScript, Tailwind CSS) deployed to **Cloudflare
+Workers**, backed by a **Supabase** Postgres database for content, auth and file storage. Content
+editors work at `/admin` inside this same app — there is no separate CMS to run or deploy.
 
 ## Stack
 
 - **Next.js 16** (App Router, Server Components) → Cloudflare Workers via the
   [OpenNext Cloudflare adapter](https://opennext.js.org/cloudflare)
 - **TypeScript**, **Tailwind CSS v4**
-- **Strapi 5** (TypeScript) → Railway, Postgres, Cloudflare R2 for media
+- **Supabase** — Postgres, Row Level Security, Auth (admin sign-in), Storage (photos/videos/PDFs)
 - **React Hook Form + Zod** — public-facing form validation
 - **Resend** — transactional email (optional; enquiries still save without it)
 
@@ -29,82 +22,64 @@ custom admin UI in the Next.js app.
 src/
   app/
     (public)/        Public site — homepage, stallions, training, contact, etc.
-    api/enquiries/     Enquiry form submission endpoint (proxies to Strapi + sends email)
+    admin/            Admin panel — auth-gated, Server Actions for every write
+    api/enquiries/     Enquiry form submission endpoint (saves to Supabase + sends email)
     sitemap.ts, robots.ts
   components/
     site/              Header, footer, homepage sections
-    stallions/          Stallion catalogue components
+    stallions/          Stallion catalogue components (incl. the photo/video carousel)
+    admin/               Admin form fields, uploaders, stallion/news/etc. forms
     forms/               Public enquiry forms (React Hook Form)
     ui/                   Shared primitives (Button, Container, BrandImage…)
   lib/
-    data/                Server-side Strapi data-access functions
-    cms/                  Strapi REST client, media URL helper, TypeScript types
+    data/                Server-side Supabase data-access functions
+    supabase/             Server/browser/admin Supabase clients, TypeScript types
     validation/           Zod schemas for enquiry forms
     email/                 Resend integration
     format.ts, fonts.ts
-wrangler.jsonc          Cloudflare Worker config (frontend)
+  proxy.ts              Middleware — gates /admin behind a signed-in session
+
+supabase/
+  migrations/            SQL migrations, run in order (see docs/SUPABASE_SETUP.md)
+  seed-assets/            Real photos referenced by the seed migrations
+
+scripts/
+  upload-seed-assets.mjs  One-time script: uploads supabase/seed-assets/ to Storage
+
+wrangler.jsonc          Cloudflare Worker config
 open-next.config.ts     OpenNext Cloudflare adapter config
 
-cms/                    Strapi CMS — a separate app, own package.json
-  src/api/                Content types: stallion, horse-for-sale, result, news-article,
-                           form-document, enquiry, enquiry-note, plus single types
-                           (site-setting, homepage, about-page, training-page,
-                           yearling-preparation-page)
-  src/components/         Reusable field groups (stallion highlights, progeny, pedigree…)
-  src/bootstrap/          First-boot setup: public API permissions, first admin user,
-                           verified-content seed (see docs/CONTENT_MIGRATION.md)
-  Dockerfile, railway.json
-
 docs/
-  DEPLOYMENT.md          Cloudflare (frontend) + Railway (CMS) deploy steps
-  STRAPI_SETUP.md        Local Strapi setup, content types, permissions
+  DEPLOYMENT.md          Cloudflare + Supabase deploy steps
+  SUPABASE_SETUP.md       Creating the project, running migrations, RLS summary
   ENVIRONMENT_VARIABLES.md
-  CONTENT_MIGRATION.md
-  ADMIN_GUIDE.md         Using the Strapi admin panel
+  CONTENT_MIGRATION.md    What's verified vs. still needs staff review
+  ADMIN_GUIDE.md          Using the /admin panel
 ```
 
 ## Getting started
 
-### CMS (Strapi)
-
-```bash
-cd cms
-npm install
-cp .env.example .env   # then fill in APP_KEYS etc. — see docs/STRAPI_SETUP.md
-npm run develop
-```
-
-Open [http://localhost:1337/admin](http://localhost:1337/admin) to create your first admin account (or
-set `STRAPI_ADMIN_EMAIL`/`STRAPI_ADMIN_PASSWORD` in `cms/.env` to have one created automatically on
-first boot — local/dev convenience only, never set those in production).
-
-### Frontend (Next.js)
-
 ```bash
 npm install
-cp .env.local.example .env.local   # point STRAPI_URL at the CMS above
+cp .env.local.example .env.local   # point at your Supabase project — see docs/SUPABASE_SETUP.md
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000), and [http://localhost:3000/admin](http://localhost:3000/admin)
+for the admin panel once you've created an account (see [`docs/SUPABASE_SETUP.md`](docs/SUPABASE_SETUP.md)).
 
 ## Content status
 
-Nothing on the public site should be treated as current until confirmed by Medowie Lodge staff in the
-Strapi admin. See [`docs/CONTENT_MIGRATION.md`](docs/CONTENT_MIGRATION.md) for exactly what's verified
-vs. what's an empty field waiting to be filled in — this rebuild could not crawl or download assets from
-the live medowielodge.com.au site or third-party sources, so only independently verified content is
-seeded.
+Nothing on the public site should be treated as current until confirmed by Medowie Lodge staff in
+`/admin`. See [`docs/CONTENT_MIGRATION.md`](docs/CONTENT_MIGRATION.md) for exactly what's verified vs.
+what's an empty field waiting to be filled in — only independently verified content is seeded, never a
+guess.
 
 ## Scripts
 
-Frontend (repo root):
 - `npm run dev` — dev server
 - `npm run build` — production build (Node target, useful for typechecking/CI)
 - `npm run cf:build` / `npm run cf:preview` / `npm run cf:deploy` — Cloudflare Workers build/preview/deploy
 - `npm run lint` — ESLint
-
-CMS (`cms/`):
-- `npm run develop` — dev server with auto-reload
-- `npm run build` — build the admin panel
-- `npm run start` — production server
+- `node scripts/upload-seed-assets.mjs` — upload the real seed photos to Supabase Storage (needs
+  `SUPABASE_SERVICE_ROLE_KEY`)

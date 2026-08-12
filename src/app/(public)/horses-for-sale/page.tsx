@@ -4,7 +4,6 @@ import { PageHero } from "@/components/site/PageHero";
 import { BrandImage } from "@/components/ui/BrandImage";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatCurrency } from "@/lib/format";
-import { mediaUrl } from "@/lib/cms/media";
 import { getAvailableHorses, getArchivedHorses } from "@/lib/data/horses";
 
 export const metadata: Metadata = {
@@ -35,23 +34,23 @@ export default async function HorsesForSalePage() {
               {horses.map((horse) => (
                 <Link key={horse.id} href={`/horses-for-sale/${horse.slug}`} className="group block border border-line">
                   <div className="relative aspect-[4/3]">
-                    <BrandImage src={mediaUrl(horse.heroImage)} alt={horse.name} label={horse.name} />
-                    {horse.state === "under_offer" && (
+                    <BrandImage src={horse.hero_image_url} alt={horse.name} label={horse.name} />
+                    {horse.status === "under_offer" && (
                       <span className="absolute right-0 top-0 bg-charcoal px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-warm-white">
                         Under Offer
                       </span>
                     )}
                   </div>
                   <div className="p-5">
-                    <p className="eyebrow text-[10px]">{horse.saleType}</p>
+                    <p className="eyebrow text-[10px]">{horse.sale_type}</p>
                     <h2 className="mt-1 font-serif text-xl text-brown group-hover:underline">{horse.name}</h2>
                     <p className="mt-1 text-sm text-grey">
-                      {[horse.sex, horse.gait, horse.yearFoaled ? `Foaled ${horse.yearFoaled}` : null]
+                      {[horse.sex, horse.gait, horse.year_foaled ? `Foaled ${horse.year_foaled}` : null]
                         .filter(Boolean)
                         .join(" · ")}
                     </p>
                     <p className="mt-2 text-sm font-semibold text-charcoal">
-                      {horse.priceType === "poa" ? "POA" : formatCurrency(horse.price) ?? "POA"}
+                      {horse.price_type === "poa" ? "POA" : formatCurrency(horse.price) ?? "POA"}
                     </p>
                   </div>
                 </Link>
@@ -70,13 +69,13 @@ export default async function HorsesForSalePage() {
               {archived.map((horse) => (
                 <div key={horse.id} className="border border-line opacity-90">
                   <div className="relative aspect-[4/3]">
-                    <BrandImage src={mediaUrl(horse.heroImage)} alt={horse.name} label={horse.name} />
+                    <BrandImage src={horse.hero_image_url} alt={horse.name} label={horse.name} />
                     <span className="absolute right-0 top-0 bg-charcoal px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-warm-white">
                       Sold
                     </span>
                   </div>
                   <div className="p-5">
-                    <p className="eyebrow text-[10px]">{horse.saleType}</p>
+                    <p className="eyebrow text-[10px]">{horse.sale_type}</p>
                     <h2 className="mt-1 font-serif text-xl text-brown">{horse.name}</h2>
                     <p className="mt-1 text-sm text-grey">
                       {[horse.sire, horse.dam].filter(Boolean).join(" x ")}

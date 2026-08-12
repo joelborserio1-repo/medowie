@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { clsx } from "clsx";
 import { StallionCard } from "@/components/stallions/StallionCard";
-import type { Stallion } from "@/lib/cms/types";
+import type { Stallion } from "@/lib/supabase/types";
 
 const FILTERS = [
   { label: "All", value: "all" },

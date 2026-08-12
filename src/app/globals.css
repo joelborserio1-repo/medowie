@@ -25,7 +25,11 @@
   --color-earth: var(--color-earth);
   --color-line: var(--color-line);
 
-  --font-serif: var(--font-cormorant), Georgia, serif;
+  /* Named --font-serif/font-serif for historical reasons (kept so the class
+     doesn't need renaming across every component) — it's actually Oswald,
+     a condensed display sans, chosen for a racing-results-board feel rather
+     than the editorial serif this was originally. */
+  --font-serif: var(--font-oswald), "Arial Narrow", Arial, sans-serif;
   --font-sans: var(--font-inter), Arial, Helvetica, sans-serif;
 
   --radius-brand: 3px;

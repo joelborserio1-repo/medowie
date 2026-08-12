@@ -3,8 +3,7 @@ import { BrandImage } from "@/components/ui/BrandImage";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatCurrency } from "@/lib/format";
-import { mediaUrl } from "@/lib/cms/media";
-import type { HorseForSale } from "@/lib/cms/types";
+import type { HorseForSale } from "@/lib/supabase/types";
 
 export function HorsesForSalePreview({ horses }: { horses: HorseForSale[] }) {
   return (
@@ -32,8 +31,8 @@ export function HorsesForSalePreview({ horses }: { horses: HorseForSale[] }) {
             {horses.map((horse) => (
               <Link key={horse.id} href={`/horses-for-sale/${horse.slug}`} className="group block">
                 <div className="relative aspect-[4/3]">
-                  <BrandImage src={mediaUrl(horse.heroImage)} alt={horse.name} label={horse.name} />
-                  {horse.state === "under_offer" && (
+                  <BrandImage src={horse.hero_image_url} alt={horse.name} label={horse.name} />
+                  {horse.status === "under_offer" && (
                     <span className="absolute right-0 top-0 bg-charcoal px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-warm-white">
                       Under Offer
                     </span>
@@ -41,12 +40,12 @@ export function HorsesForSalePreview({ horses }: { horses: HorseForSale[] }) {
                 </div>
                 <h3 className="mt-4 font-serif text-lg text-brown group-hover:underline">{horse.name}</h3>
                 <p className="mt-1 text-sm text-grey">
-                  {[horse.sex, horse.yearFoaled ? `Foaled ${horse.yearFoaled}` : null]
+                  {[horse.sex, horse.year_foaled ? `Foaled ${horse.year_foaled}` : null]
                     .filter(Boolean)
                     .join(" · ")}
                 </p>
                 <p className="mt-1 text-sm font-semibold text-charcoal">
-                  {horse.priceType === "poa" ? "POA" : formatCurrency(horse.price) ?? "POA"}
+                  {horse.price_type === "poa" ? "POA" : formatCurrency(horse.price) ?? "POA"}
                 </p>
               </Link>
             ))}

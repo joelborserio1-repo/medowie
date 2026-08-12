@@ -50,10 +50,10 @@ export async function Footer() {
               </a>
             </p>
           )}
-          {settings?.facebookUrl && (
+          {settings?.facebook_url && (
             <p className="mt-4">
               <a
-                href={settings.facebookUrl}
+                href={settings.facebook_url}
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-orange"

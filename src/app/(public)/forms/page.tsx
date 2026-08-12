@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { FormDocumentRow } from "@/components/site/FormDocumentRow";
 import { getDocumentsByCategory } from "@/lib/data/documents";
 import { getSiteSettings } from "@/lib/data/settings";
-import type { DocumentCategory, FormDocument } from "@/lib/cms/types";
+import type { DocumentCategory, DocumentRecord } from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
   title: "Forms & Contracts",
@@ -18,12 +18,12 @@ export default async function FormsPage() {
     getSiteSettings().catch(() => null),
   ]);
 
-  const categories = grouped ? (Object.entries(grouped) as [DocumentCategory, FormDocument[]][]) : [];
+  const categories = grouped ? (Object.entries(grouped) as [DocumentCategory, DocumentRecord[]][]) : [];
   const hasAny = categories.some(([, docs]) => docs.length > 0);
 
   const collectionInfo = [
-    settings?.collectionDays ? { label: "Collection Days", value: settings.collectionDays } : null,
-    settings?.collectionCutoffTime ? { label: "Order Cut-Off", value: settings.collectionCutoffTime } : null,
+    settings?.collection_days ? { label: "Collection Days", value: settings.collection_days } : null,
+    settings?.collection_cutoff_time ? { label: "Order Cut-Off", value: settings.collection_cutoff_time } : null,
   ].filter((c): c is { label: string; value: string } => Boolean(c));
 
   return (
@@ -72,8 +72,8 @@ export default async function FormsPage() {
                 </div>
               ))}
             </dl>
-            {settings?.collectionInstructions && (
-              <p className="mt-6 max-w-2xl text-sm leading-relaxed text-grey">{settings.collectionInstructions}</p>
+            {settings?.collection_instructions && (
+              <p className="mt-6 max-w-2xl text-sm leading-relaxed text-grey">{settings.collection_instructions}</p>
             )}
           </div>
         </section>

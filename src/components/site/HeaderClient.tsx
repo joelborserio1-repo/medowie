@@ -20,7 +20,7 @@ const NAV_LINKS = [
 interface StallionNavItem {
   name: string;
   slug: string;
-  countrySuffix: string | null;
+  country_suffix: string | null;
 }
 
 export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
@@ -104,7 +104,7 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
                     className="block px-4 py-2.5 text-[14px] text-charcoal hover:bg-parchment"
                   >
                     {s.name}
-                    {s.countrySuffix ? ` ${s.countrySuffix}` : ""}
+                    {s.country_suffix ? ` ${s.country_suffix}` : ""}
                   </Link>
                 ))}
                 {stallions.length === 0 && (
@@ -164,7 +164,7 @@ export function HeaderClient({ stallions }: { stallions: StallionNavItem[] }) {
                 className="border-b border-line py-2 pl-4 text-sm text-grey"
               >
                 {s.name}
-                {s.countrySuffix ? ` ${s.countrySuffix}` : ""}
+                {s.country_suffix ? ` ${s.country_suffix}` : ""}
               </Link>
             ))}
             {NAV_LINKS.filter((l) => l.href !== "/").map((link) => (

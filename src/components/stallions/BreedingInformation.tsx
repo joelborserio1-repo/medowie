@@ -1,5 +1,5 @@
 import { formatDate, formatFee } from "@/lib/format";
-import type { Stallion, StallionEligibility } from "@/lib/cms/types";
+import type { Stallion, StallionEligibility } from "@/lib/supabase/types";
 
 export function BreedingInformation({
   stallion,
@@ -9,12 +9,12 @@ export function BreedingInformation({
   eligibility: StallionEligibility[];
 }) {
   const rows = [
-    { label: "Service Fee", value: formatFee(stallion.serviceFee, stallion.includesGst) },
+    { label: "Service Fee", value: formatFee(stallion.service_fee, stallion.includes_gst) },
     { label: "Gait", value: stallion.gait },
-    { label: "Foaled", value: formatDate(stallion.foaledDate) },
+    { label: "Foaled", value: formatDate(stallion.foaled_date) },
     { label: "Height", value: stallion.height },
     { label: "Colour", value: stallion.colour },
-    { label: "Country", value: stallion.countrySuffix },
+    { label: "Country", value: stallion.country_suffix },
     { label: "Sire", value: stallion.sire },
     { label: "Dam", value: stallion.dam },
     { label: "Damsire", value: stallion.damsire },
@@ -35,7 +35,7 @@ export function BreedingInformation({
           ))}
         </dl>
 
-        {stallion.semenNotes && <p className="mt-6 text-sm text-grey">{stallion.semenNotes}</p>}
+        {stallion.semen_notes && <p className="mt-6 text-sm text-grey">{stallion.semen_notes}</p>}
 
         {eligibility.length > 0 && (
           <div className="mt-8">

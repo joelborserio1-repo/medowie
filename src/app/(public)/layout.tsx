@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { cormorant, inter } from "@/lib/fonts";
+import { oswald, inter } from "@/lib/fonts";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { getSiteSettings } from "@/lib/data/settings";
-import { mediaUrl } from "@/lib/cms/media";
 import "../globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.medowielodge.com.au";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings().catch(() => null);
-  const title = settings?.seoDefaultTitle ?? "Medowie Lodge — Standardbred Stud & Harness Racing Stables";
+  const title = settings?.seo_default_title ?? "Medowie Lodge — Standardbred Stud & Harness Racing Stables";
   const description =
-    settings?.seoDefaultDescription ??
+    settings?.seo_default_description ??
     "Medowie Lodge is a Standardbred stud and harness racing stable at Medowie, NSW.";
-  const ogImage = mediaUrl(settings?.ogImage);
+  const ogImage = settings?.og_image_url;
 
   return {
     metadataBase: new URL(siteUrl),
@@ -44,24 +43,24 @@ export default async function PublicLayout({ children }: { children: React.React
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: settings?.businessName ?? "Medowie Lodge",
-    description: settings?.seoDefaultDescription,
+    name: settings?.business_name ?? "Medowie Lodge",
+    description: settings?.seo_default_description,
     telephone: settings?.phone,
     email: settings?.email,
     address: {
       "@type": "PostalAddress",
-      streetAddress: settings?.addressLine1,
+      streetAddress: settings?.address_line1,
       addressLocality: settings?.suburb,
       addressRegion: settings?.state,
       postalCode: settings?.postcode,
       addressCountry: "AU",
     },
     url: siteUrl,
-    sameAs: settings?.facebookUrl ? [settings.facebookUrl] : undefined,
+    sameAs: settings?.facebook_url ? [settings.facebook_url] : undefined,
   };
 
   return (
-    <html lang="en-AU" className={`${cormorant.variable} ${inter.variable}`}>
+    <html lang="en-AU" className={`${oswald.variable} ${inter.variable}`}>
       <body className="flex min-h-screen flex-col antialiased">
         <script
           type="application/ld+json"

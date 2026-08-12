@@ -29,7 +29,7 @@
 		"binding": "IMAGES"
 	},
 	"vars": {
-		// Non-secret runtime vars. Secrets (STRAPI API token, RESEND_API_KEY)
+		// Non-secret runtime vars. Secrets (Supabase service role key, RESEND_API_KEY)
 		// are set with `wrangler secret put <NAME>` instead — see
 		// docs/DEPLOYMENT.md.
 		"NEXT_PUBLIC_SITE_URL": "https://www.medowielodge.com.au"

@@ -13,8 +13,7 @@ import { getFeaturedStallion, getPublishedStallions } from "@/lib/data/stallions
 import { getAvailableHorses } from "@/lib/data/horses";
 import { getLatestResults } from "@/lib/data/results";
 import { getLatestNews } from "@/lib/data/news";
-import { getHomepage, getSiteSettings } from "@/lib/data/settings";
-import { mediaUrl } from "@/lib/cms/media";
+import { getContentBlock, getSiteSettings } from "@/lib/data/settings";
 
 export default async function HomePage() {
   const [stallions, featured, horses, results, news, intro, settings] = await Promise.all([
@@ -23,7 +22,7 @@ export default async function HomePage() {
     getAvailableHorses(3).catch(() => []),
     getLatestResults(5).catch(() => []),
     getLatestNews(3).catch(() => []),
-    getHomepage().catch(() => null),
+    getContentBlock("homepage_intro").catch(() => null),
     getSiteSettings().catch(() => null),
   ]);
 
@@ -32,17 +31,17 @@ export default async function HomePage() {
   return (
     <>
       <Hero
-        videoUrl={mediaUrl(intro?.heroVideo)}
-        videoStartSeconds={intro?.heroVideoStartSeconds}
-        videoEndSeconds={intro?.heroVideoEndSeconds}
+        videoUrl={settings?.hero_video_url}
+        videoStartSeconds={settings?.hero_video_start_seconds}
+        videoEndSeconds={settings?.hero_video_end_seconds}
       />
 
-      {intro?.introBody && (
+      {intro?.body && (
         <section className="py-16 sm:py-24">
           <div className="mx-auto grid w-full max-w-[1400px] gap-8 px-5 sm:px-8 md:grid-cols-[220px_1fr]">
-            <p className="eyebrow">{intro.introHeading ?? "Medowie Lodge"}</p>
+            <p className="eyebrow">{intro.heading ?? "Medowie Lodge"}</p>
             <div className="max-w-2xl whitespace-pre-line text-[17px] leading-relaxed text-charcoal">
-              {intro.introBody}
+              {intro.body}
             </div>
           </div>
         </section>
@@ -144,7 +143,7 @@ export default async function HomePage() {
 
       <ResultsList results={results} />
       <NewsList articles={news} />
-      <FacebookFeed facebookUrl={settings?.facebookUrl} />
+      <FacebookFeed facebookUrl={settings?.facebook_url} />
 
       <ContactCta settings={settings} />
     </>
