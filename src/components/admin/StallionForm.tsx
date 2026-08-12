@@ -1,4 +1,6 @@
 import { Field, TextArea, Select, Checkbox, SubmitButton } from "@/components/admin/FormField";
+import { ImageInput } from "@/components/admin/ImageInput";
+import { DocumentInput } from "@/components/admin/DocumentInput";
 import { upsertStallion } from "@/app/admin/(dashboard)/stallions/actions";
 import type { Stallion } from "@/lib/supabase/types";
 
@@ -49,7 +51,8 @@ export function StallionForm({ stallion }: { stallion?: Stallion }) {
         <h2 className="mb-4 border-b border-line pb-2 font-serif text-lg text-brown">Service Fee</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <Field label="Service Fee (AUD)" name="service_fee" type="number" step="0.01" defaultValue={stallion?.service_fee} />
-          <Field label="Fee Notes" name="fee_notes" defaultValue={stallion?.fee_notes} className="sm:col-span-2" />
+          <Field label="Service Fee (NZD)" name="service_fee_nz" type="number" step="0.01" defaultValue={stallion?.service_fee_nz} />
+          <Field label="Fee Notes" name="fee_notes" defaultValue={stallion?.fee_notes} />
         </div>
         <Checkbox label="Fee includes GST" name="includes_gst" defaultChecked={stallion?.includes_gst ?? true} className="mt-4" />
       </section>
@@ -74,7 +77,12 @@ export function StallionForm({ stallion }: { stallion?: Stallion }) {
           <TextArea label="Short Description" name="short_description" defaultValue={stallion?.short_description} rows={3} />
           <TextArea label="Full Biography" name="full_biography" defaultValue={stallion?.full_biography} rows={8} />
           <TextArea label="Mating Information" name="mating_information" defaultValue={stallion?.mating_information} rows={5} />
-          <Field label="Mating Hints PDF URL" name="mating_pdf_url" defaultValue={stallion?.mating_pdf_url} />
+          <DocumentInput
+            label="Mating Hints (PDF)"
+            name="mating_pdf_url"
+            defaultValue={stallion?.mating_pdf_url}
+            folder={stallion?.slug ?? "stallions"}
+          />
         </div>
       </section>
 
@@ -89,16 +97,46 @@ export function StallionForm({ stallion }: { stallion?: Stallion }) {
       </section>
 
       <section>
-        <h2 className="mb-4 border-b border-line pb-2 font-serif text-lg text-brown">Images &amp; Documents</h2>
-        <p className="mb-3 text-xs text-grey">
-          Upload photos on the Media page, then paste the resulting URL here.
+        <h2 className="mb-4 border-b border-line pb-2 font-serif text-lg text-brown">Images</h2>
+        <p className="mb-4 text-xs text-grey">
+          Drag &amp; drop a photo onto each box, or click to choose one from your computer. Photos upload
+          automatically — you never need to copy or paste a link.
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Hero Image URL" name="hero_image_url" defaultValue={stallion?.hero_image_url} />
-          <Field label="Profile Image URL" name="profile_image_url" defaultValue={stallion?.profile_image_url} />
-          <Field label="Card Image URL" name="card_image_url" defaultValue={stallion?.card_image_url} />
-          <Field label="Pedigree Document URL" name="pedigree_document_url" defaultValue={stallion?.pedigree_document_url} />
+        <div className="grid gap-6 sm:grid-cols-2">
+          <ImageInput
+            label="Main / Hero Image"
+            name="hero_image_url"
+            defaultValue={stallion?.hero_image_url}
+            folder={stallion?.slug ?? "stallions"}
+            helpText="The large photo at the top of the stallion page."
+          />
+          <ImageInput
+            label="Profile Image"
+            name="profile_image_url"
+            defaultValue={stallion?.profile_image_url}
+            folder={stallion?.slug ?? "stallions"}
+            helpText="Portrait used in the pedigree / bio area."
+          />
+          <ImageInput
+            label="Card Image (listing thumbnail)"
+            name="card_image_url"
+            defaultValue={stallion?.card_image_url}
+            folder={stallion?.slug ?? "stallions"}
+            helpText="Shown on the stallions listing page."
+          />
         </div>
+        <div className="mt-6 grid gap-6 sm:grid-cols-2">
+          <DocumentInput
+            label="Pedigree Document (PDF)"
+            name="pedigree_document_url"
+            defaultValue={stallion?.pedigree_document_url}
+            folder={stallion?.slug ?? "stallions"}
+          />
+        </div>
+        <p className="mt-6 text-xs text-grey">
+          More photos for the on-page carousel and PDF forms &amp; contracts can be added below once the
+          stallion is saved.
+        </p>
       </section>
 
       <section>

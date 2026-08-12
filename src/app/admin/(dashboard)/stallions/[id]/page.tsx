@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { StallionForm } from "@/components/admin/StallionForm";
 import { DeleteButton } from "@/components/admin/DeleteButton";
+import { GalleryManager } from "@/components/admin/GalleryManager";
+import { DocumentManager } from "@/components/admin/DocumentManager";
 import { Field, TextArea, SubmitButton, Checkbox } from "@/components/admin/FormField";
 import {
   deleteStallion,
@@ -12,12 +14,8 @@ import {
   deleteHighlight,
   addEligibility,
   deleteEligibility,
-  addGalleryImage,
-  deleteGalleryImage,
   addVideo,
   deleteVideo,
-  addDocument,
-  deleteDocument,
   addProgeny,
   deleteProgeny,
   upsertPedigree,
@@ -46,9 +44,7 @@ export default async function EditStallionPage({ params }: { params: Promise<{ i
   const duplicateAction = duplicateStallion.bind(null, id);
   const addHighlightAction = addHighlight.bind(null, id);
   const addEligibilityAction = addEligibility.bind(null, id);
-  const addGalleryAction = addGalleryImage.bind(null, id);
   const addVideoAction = addVideo.bind(null, id);
-  const addDocumentAction = addDocument.bind(null, id);
   const addProgenyAction = addProgeny.bind(null, id);
   const savePedigreeAction = upsertPedigree.bind(null, id);
 
@@ -131,24 +127,15 @@ export default async function EditStallionPage({ params }: { params: Promise<{ i
 
       {/* Gallery */}
       <section className="mt-14 border-t border-line pt-8">
-        <h2 className="mb-4 font-serif text-xl text-brown">Media Gallery</h2>
-        <ul className="mb-4 divide-y divide-line border-y border-line">
-          {(gallery ?? []).map((g) => (
-            <li key={g.id} className="flex items-center justify-between gap-4 py-2 text-sm">
-              <span className="truncate">{g.image_url}</span>
-              <form action={deleteGalleryImage.bind(null, id, g.id)}>
-                <button className="shrink-0 text-xs text-grey hover:text-orange-dark">Remove</button>
-              </form>
-            </li>
-          ))}
-        </ul>
-        <form action={addGalleryAction} className="grid gap-3 sm:grid-cols-3">
-          <Field label="Image URL" name="image_url" className="sm:col-span-2" />
-          <Field label="Alt Text" name="alt_text" />
-          <div className="sm:col-span-3">
-            <SubmitButton label="Add Image" />
-          </div>
-        </form>
+        <h2 className="mb-2 font-serif text-xl text-brown">Photo Carousel</h2>
+        <p className="mb-4 text-sm text-grey">
+          These photos appear in the image carousel at the top of the stallion&apos;s page.
+        </p>
+        <GalleryManager
+          stallionId={id}
+          folder={stallion.slug}
+          images={(gallery ?? []).map((g) => ({ id: g.id, image_url: g.image_url, alt_text: g.alt_text }))}
+        />
       </section>
 
       {/* Videos */}
@@ -175,24 +162,15 @@ export default async function EditStallionPage({ params }: { params: Promise<{ i
 
       {/* Documents */}
       <section className="mt-14 border-t border-line pt-8">
-        <h2 className="mb-4 font-serif text-xl text-brown">Documents</h2>
-        <ul className="mb-4 divide-y divide-line border-y border-line">
-          {(documents ?? []).map((d) => (
-            <li key={d.id} className="flex items-center justify-between gap-4 py-2 text-sm">
-              <span className="truncate">{d.title}</span>
-              <form action={deleteDocument.bind(null, id, d.id)}>
-                <button className="shrink-0 text-xs text-grey hover:text-orange-dark">Remove</button>
-              </form>
-            </li>
-          ))}
-        </ul>
-        <form action={addDocumentAction} className="grid gap-3 sm:grid-cols-3">
-          <Field label="Title" name="title" />
-          <Field label="File URL" name="file_url" className="sm:col-span-2" />
-          <div className="sm:col-span-3">
-            <SubmitButton label="Add Document" />
-          </div>
-        </form>
+        <h2 className="mb-2 font-serif text-xl text-brown">Contracts &amp; Forms</h2>
+        <p className="mb-4 text-sm text-grey">
+          PDFs listed in the &ldquo;Contracts &amp; Forms&rdquo; section on the stallion&apos;s page.
+        </p>
+        <DocumentManager
+          stallionId={id}
+          folder={stallion.slug}
+          documents={(documents ?? []).map((d) => ({ id: d.id, title: d.title, file_url: d.file_url }))}
+        />
       </section>
 
       {/* Progeny */}
