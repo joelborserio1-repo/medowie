@@ -5,7 +5,6 @@ const FOOTER_LINKS = [
   { label: "Stallions", href: "/stallions" },
   { label: "Yearling Preparation", href: "/yearling-preparation" },
   { label: "Horses for Sale", href: "/horses-for-sale" },
-  { label: "Forms & Contracts", href: "/forms" },
   { label: "Contact", href: "/contact" },
 ];
 

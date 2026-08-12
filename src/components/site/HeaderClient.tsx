@@ -12,7 +12,6 @@ const NAV_LINKS = [
   { label: "Yearling Preparation", href: "/yearling-preparation" },
   { label: "Horses for Sale", href: "/horses-for-sale" },
   { label: "About", href: "/about" },
-  { label: "Forms & Contracts", href: "/forms" },
   { label: "Contact", href: "/contact" },
 ];
 

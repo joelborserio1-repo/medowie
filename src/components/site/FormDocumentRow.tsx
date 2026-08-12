@@ -1,7 +1,14 @@
 import { formatDate } from "@/lib/format";
-import type { DocumentRecord } from "@/lib/supabase/types";
 
-export function FormDocumentRow({ doc }: { doc: DocumentRecord }) {
+interface FormDocumentRowRecord {
+  title: string;
+  file_url: string;
+  season?: string | null;
+  description?: string | null;
+  updated_at?: string | null;
+}
+
+export function FormDocumentRow({ doc }: { doc: FormDocumentRowRecord }) {
   const fileUrl = doc.file_url;
   const isPdf = fileUrl.toLowerCase().split("?")[0].endsWith(".pdf");
 

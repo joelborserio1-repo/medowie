@@ -30,7 +30,8 @@ section-for-section:
 - **Career Highlights, Eligible Schemes, Progeny, Videos, Gallery, Documents** are each their own small
   table on the stallion's edit page — add or remove rows directly below the main form. **Gallery**
   photos and **Videos** (paste a YouTube URL) together drive the photo/video carousel on the public
-  profile page.
+  profile page. **Documents** (a title plus a file URL) is that stallion's own Forms & Contracts
+  section — PDFs get the same inline "View" toggle as the site-wide Forms & Contracts page.
 - **Pedigree** (sire's sire/dam, dam's sire/dam) is a single form on the same page.
 
 Upload photos and documents via **Admin → Media** first (pick a bucket, upload, copy the resulting

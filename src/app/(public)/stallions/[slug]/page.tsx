@@ -7,6 +7,7 @@ import { BreedingInformation } from "@/components/stallions/BreedingInformation"
 import { PedigreeTree } from "@/components/stallions/PedigreeTree";
 import { ProgenyList } from "@/components/stallions/ProgenyList";
 import { MediaGallery } from "@/components/stallions/MediaGallery";
+import { FormDocumentRow } from "@/components/site/FormDocumentRow";
 import { StallionEnquiryForm } from "@/components/forms/StallionEnquiryForm";
 import { getStallionDetail } from "@/lib/data/stallions";
 import { stallionDisplayName } from "@/lib/format";
@@ -119,15 +120,11 @@ export default async function StallionProfilePage({ params }: { params: Promise<
       {documents.length > 0 && (
         <section className="border-b border-line py-14">
           <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
-            <p className="eyebrow mb-3">Documents</p>
-            <h2 className="font-serif text-3xl text-brown">Downloads</h2>
-            <ul className="mt-6 space-y-2">
+            <p className="eyebrow mb-3">Forms &amp; Contracts</p>
+            <h2 className="font-serif text-3xl text-brown">Documents</h2>
+            <ul className="mt-6 divide-y divide-line">
               {documents.map((d) => (
-                <li key={d.id}>
-                  <a href={d.file_url} className="text-sm font-medium text-orange hover:underline">
-                    {d.title} →
-                  </a>
-                </li>
+                <FormDocumentRow key={d.id} doc={d} />
               ))}
             </ul>
           </div>
