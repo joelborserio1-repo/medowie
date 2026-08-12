@@ -59,10 +59,20 @@ turned out to be a hard blocker. All the verified content below survived both mi
 - **Soho Lanikai**, a sixth stallion, from a dedicated Medowie Lodge promotional flyer: service fee
   ($2,000 inc. GST), sire (Somebeachsomewhere), gait (Pacer, inferred from the sulky photo and mile
   rate), and his first-start result ("won by 65 metres in 1:54") as a career highlight. The flyer names
-  his dam only as "a Group 1 winning mare" with no actual name given, so `dam` is left blank rather than
-  guessed. Like the other five, seeded as `admin_review` — the flyer carries no date, so current
-  standing status can't be confirmed. The flyer image itself is uploaded to his gallery by
+  his dam only as "a Group 1 winning mare" with no actual name given, so `dam` was initially left blank
+  rather than guessed. Like the other five, seeded as `admin_review` — the flyer carries no date, so
+  current standing status can't be confirmed. The flyer image itself is uploaded to his gallery by
   `scripts/upload-seed-assets.mjs`.
+  - **Filled in later** (`0006_soho_lanikai_harnesslink_upgrade.sql`) from his HarnessLink directory
+    profile (`harnesslink.com/directory/stallion/1168/soho-lanikai/`), supplied by the client as
+    screenshots since that domain is blocked by this environment's network egress: his dam's actual name
+    (Obahma Joy), damsire (American Ideal), colour (Brown), a full four-name pedigree plus a third
+    generation, the exact race name/margin/time for his highlight (Express Premiere Stakes, 65.2 metres,
+    1:54.0), and career-summary numbers (career earnings $13,680, 2 starts, 1 win) read off the page's
+    "SOMEBEACHSOMEWHERE x OBAHMA JOY - $13,680 - 2, 1:54.0M" summary line, interpreted per HarnessLink's
+    standard format. Foaling year (2017) is noted in his biography text rather than `foaled_date`, since
+    only the year — not an exact date — is shown. Service fee, gait and mile rate already matched the
+    flyer exactly, confirming this is the same horse.
 - **Three historical yearling sale records** from the "2018 Sydney APG Yearling Sale" example on the
   Horses for Sale page (Lot 327, 357, 428), including their real sire/dam pairings, seeded as
   `sold`/archive entries — not current listings. **Lot 327** also gets its real sale-catalogue photo,
