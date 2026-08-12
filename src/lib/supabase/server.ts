@@ -1,17 +1,22 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { getSupabaseConfig } from "./config";
 
 /**
  * Supabase client for use in Server Components, Server Actions and Route
  * Handlers. Reads the user's session from cookies so RLS (is_admin(), etc.)
  * evaluates against the signed-in user.
+ *
+ * URL + key come from the single source of truth in `config.ts` so server-side
+ * access can never drift onto a different Supabase project than the browser.
  */
 export async function createClient() {
   const cookieStore = await cookies();
+  const { url, anonKey } = getSupabaseConfig();
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
     {
       cookies: {
         getAll() {

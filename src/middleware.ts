@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getSupabaseConfig } from "@/lib/supabase/config";
 
 // Kept as middleware.ts (not proxy.ts) and pinned to the edge runtime: Next.js 16's
 // proxy.ts convention is hardcoded to the Node.js runtime, which OpenNext's Cloudflare
@@ -9,9 +10,10 @@ export const runtime = "experimental-edge";
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
+  const { url, anonKey } = getSupabaseConfig();
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
     {
       cookies: {
         getAll() {
