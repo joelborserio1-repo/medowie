@@ -33,7 +33,7 @@ export function OperationIntro() {
           Stud, training and preparation under one property.
         </h2>
 
-        <div className="mt-10 flex flex-col gap-8">
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
           {BANNERS.map((banner) => (
             <Image
               key={banner.key}
@@ -42,7 +42,7 @@ export function OperationIntro() {
               width={banner.width}
               height={banner.height}
               className="h-auto w-full"
-              sizes="(min-width: 1400px) 1400px, 100vw"
+              sizes="(min-width: 768px) 33vw, 100vw"
             />
           ))}
         </div>
