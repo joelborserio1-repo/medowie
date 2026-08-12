@@ -1,16 +1,20 @@
+import { clsx } from "clsx";
+
 export function ContentSection({
   heading,
   body,
   eyebrow,
+  tint = false,
 }: {
   heading: string | null | undefined;
   body: string | null | undefined;
   eyebrow?: string;
+  tint?: boolean;
 }) {
   if (!body) return null;
 
   return (
-    <section className="border-b border-line py-14">
+    <section className={clsx("border-b border-line py-14", tint && "bg-parchment")}>
       <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
         <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
           <div>

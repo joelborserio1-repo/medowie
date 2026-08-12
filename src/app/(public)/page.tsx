@@ -1,14 +1,12 @@
+import Image from "next/image";
 import { Hero } from "@/components/site/Hero";
-import { OperationIntro } from "@/components/site/OperationIntro";
 import { ResultsList } from "@/components/site/ResultsList";
 import { NewsList } from "@/components/site/NewsList";
-import { ContactCta } from "@/components/site/ContactCta";
 import { HorsesForSalePreview } from "@/components/site/HorsesForSalePreview";
 import { FacebookFeed } from "@/components/site/FacebookFeed";
 import { StallionCard } from "@/components/stallions/StallionCard";
 import { FeaturedStallion } from "@/components/stallions/FeaturedStallion";
 import { Button } from "@/components/ui/Button";
-import { BrandImage } from "@/components/ui/BrandImage";
 import { getFeaturedStallion, getPublishedStallions } from "@/lib/data/stallions";
 import { getAvailableHorses } from "@/lib/data/horses";
 import { getLatestResults } from "@/lib/data/results";
@@ -82,27 +80,35 @@ export default async function HomePage() {
         </section>
       )}
 
-      <OperationIntro />
-
       <section className="border-t border-line py-16 sm:py-24">
         <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:items-center">
-          <div className="order-2 lg:order-1">
-            <p className="eyebrow mb-3">Yearling Preparation</p>
+          <div className="relative aspect-[4/3]">
+            <Image
+              src="/home/stud.webp"
+              alt="Medowie Lodge — Stud and Yearling Preparation"
+              width={1625}
+              height={968}
+              className="h-full w-full object-cover"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
+          </div>
+          <div>
+            <p className="eyebrow mb-3">The Medowie Lodge Operation</p>
             <h2 className="font-serif text-3xl text-brown sm:text-4xl">
-              Presented annually at the Sydney and Bathurst sales.
+              Stud and yearling preparation under one property.
             </h2>
             <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-grey">
-              Medowie Lodge presents well-bred, hand-raised yearlings at both the Sydney APG Yearling Sale
-              and the Bathurst Yearling Sale, held during February and March each year.
+              Quality stallions with chilled and frozen semen available, and well-bred, hand-raised
+              yearlings presented annually at the Sydney APG and Bathurst Yearling Sales.
             </p>
-            <div className="mt-6">
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button href="/stallions" variant="secondary">
+                View Stallions
+              </Button>
               <Button href="/yearling-preparation" variant="secondary">
                 View Yearling Preparation
               </Button>
             </div>
-          </div>
-          <div className="relative order-1 aspect-[4/3] lg:order-2">
-            <BrandImage src={null} alt="Yearling preparation at Medowie Lodge" label="Yearling Preparation" />
           </div>
         </div>
       </section>
@@ -121,8 +127,6 @@ export default async function HomePage() {
       <ResultsList results={results} />
       <NewsList articles={news} />
       <FacebookFeed facebookUrl={settings?.facebook_url} />
-
-      <ContactCta settings={settings} />
     </>
   );
 }

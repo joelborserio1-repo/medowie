@@ -10,24 +10,26 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-const KEYS = [
-  "about_intro",
-  "about_darren",
-  "about_complete_operation",
-  "about_experience",
-  "about_breaking_in",
-  "about_race_training",
-  "about_yearling_preparation",
-  "about_stud_services",
-  "about_horse_welfare",
-  "about_hands_on",
-  "about_hunter_region",
-  "about_built_on_experience",
+const SECTIONS = [
+  { key: "about_darren", eyebrow: "Darren Reay & Family" },
+  { key: "about_complete_operation" },
+  { key: "about_experience" },
+  { key: "about_breaking_in" },
+  { key: "about_race_training", eyebrow: "Training" },
+  { key: "about_yearling_preparation" },
+  { key: "about_stud_services", eyebrow: "Stud" },
+  { key: "about_horse_welfare" },
+  { key: "about_hands_on" },
+  { key: "about_hunter_region", eyebrow: "Medowie / Hunter Region" },
+  { key: "about_built_on_experience" },
 ] as const;
+
+const KEYS = ["about_intro", ...SECTIONS.map((s) => s.key)] as const;
 
 export default async function AboutPage() {
   const blocks = await getContentBlocks([...KEYS]);
   const intro = blocks["about_intro"];
+  const sections = SECTIONS.filter((s) => blocks[s.key]?.body);
 
   return (
     <div>
@@ -49,21 +51,15 @@ export default async function AboutPage() {
         </section>
       )}
 
-      <ContentSection heading={blocks["about_darren"]?.heading} body={blocks["about_darren"]?.body} eyebrow="Darren Reay & Family" />
-      <ContentSection heading={blocks["about_complete_operation"]?.heading} body={blocks["about_complete_operation"]?.body} />
-      <ContentSection heading={blocks["about_experience"]?.heading} body={blocks["about_experience"]?.body} />
-      <ContentSection heading={blocks["about_breaking_in"]?.heading} body={blocks["about_breaking_in"]?.body} />
-      <ContentSection heading={blocks["about_race_training"]?.heading} body={blocks["about_race_training"]?.body} eyebrow="Training" />
-      <ContentSection heading={blocks["about_yearling_preparation"]?.heading} body={blocks["about_yearling_preparation"]?.body} />
-      <ContentSection heading={blocks["about_stud_services"]?.heading} body={blocks["about_stud_services"]?.body} eyebrow="Stud" />
-      <ContentSection heading={blocks["about_horse_welfare"]?.heading} body={blocks["about_horse_welfare"]?.body} />
-      <ContentSection heading={blocks["about_hands_on"]?.heading} body={blocks["about_hands_on"]?.body} />
-      <ContentSection
-        heading={blocks["about_hunter_region"]?.heading}
-        body={blocks["about_hunter_region"]?.body}
-        eyebrow="Medowie / Hunter Region"
-      />
-      <ContentSection heading={blocks["about_built_on_experience"]?.heading} body={blocks["about_built_on_experience"]?.body} />
+      {sections.map((section, i) => (
+        <ContentSection
+          key={section.key}
+          heading={blocks[section.key]?.heading}
+          body={blocks[section.key]?.body}
+          eyebrow={"eyebrow" in section ? section.eyebrow : undefined}
+          tint={i % 2 === 1}
+        />
+      ))}
     </div>
   );
 }
