@@ -31,7 +31,7 @@ export default async function HorseForSalePage({ params }: { params: Promise<{ s
     { label: "Colour", value: horse.colour },
     { label: "Sire", value: horse.sire },
     { label: "Dam", value: horse.dam },
-    { label: "Damsire", value: horse.damsire },
+    { label: "Broodmare Sire", value: horse.damsire },
     { label: "Location", value: horse.location },
     { label: "Sale", value: horse.sale_name },
     { label: "Lot Number", value: horse.lot_number },

@@ -135,12 +135,21 @@ export interface StallionProgeny {
   name: string;
   sex: string | null;
   foaled_year: number | null;
+  /** Full foaling date (from the progeny Excel import). Optional. */
+  foaled_date: string | null;
   dam: string | null;
+  /** Broodmare sire (dam's sire). Column kept as `damsire` for compatibility. */
   damsire: string | null;
+  /** Country of birth, e.g. AUS / NZ / USA. */
+  country_of_birth: string | null;
   earnings: number | null;
   mile_rate: string | null;
+  /** Lifetime starts. */
+  starts: number | null;
   wins: number | null;
   notes: string | null;
+  /** Optional extra description / link context for a notable progeny. */
+  description: string | null;
   image_url: string | null;
   profile_url: string | null;
   featured: boolean;

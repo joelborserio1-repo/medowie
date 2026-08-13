@@ -58,7 +58,7 @@ export function HorseForm({ horse }: { horse?: HorseForSale }) {
           <Field label="Colour" name="colour" defaultValue={horse?.colour} />
           <Field label="Sire" name="sire" defaultValue={horse?.sire} />
           <Field label="Dam" name="dam" defaultValue={horse?.dam} />
-          <Field label="Damsire" name="damsire" defaultValue={horse?.damsire} />
+          <Field label="Broodmare Sire" name="damsire" defaultValue={horse?.damsire} />
           <Field label="Location" name="location" defaultValue={horse?.location} />
         </div>
         <TextArea label="Description" name="description" defaultValue={horse?.description} className="mt-4" />

@@ -40,7 +40,7 @@ export function StallionForm({ stallion }: { stallion?: Stallion }) {
         <div className="grid gap-4 sm:grid-cols-3">
           <Field label="Sire" name="sire" defaultValue={stallion?.sire} />
           <Field label="Dam" name="dam" defaultValue={stallion?.dam} />
-          <Field label="Damsire" name="damsire" defaultValue={stallion?.damsire} />
+          <Field label="Broodmare Sire" name="damsire" defaultValue={stallion?.damsire} />
           <Field label="Colour" name="colour" defaultValue={stallion?.colour} />
           <Field label="Foaled Date" name="foaled_date" type="date" defaultValue={stallion?.foaled_date} />
           <Field label="Height" name="height" defaultValue={stallion?.height} />

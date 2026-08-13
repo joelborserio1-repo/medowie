@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { StallionImageCarousel, type CarouselImage } from "@/components/stallions/StallionImageCarousel";
-import { formatAmount, stallionDisplayName } from "@/lib/format";
+import { formatAmount, formatCurrency, stallionDisplayName } from "@/lib/format";
 import type { Stallion, StallionGalleryImage } from "@/lib/supabase/types";
 
 export function StallionHero({
@@ -59,6 +59,25 @@ export function StallionHero({
             {[stallion.sire, stallion.dam].filter(Boolean).join(" x ")}
             {stallion.damsire && <span className="block text-sm">({stallion.damsire})</span>}
           </p>
+        )}
+
+        {(stallion.mile_rate || stallion.career_earnings) && (
+          <div className="mt-5 flex flex-wrap gap-x-10 gap-y-3 border-t border-line pt-5">
+            {stallion.mile_rate && (
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-earth">Best Mile Rate</p>
+                <p className="mt-0.5 font-serif text-2xl leading-none text-brown">{stallion.mile_rate}</p>
+              </div>
+            )}
+            {stallion.career_earnings && (
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-earth">Career Earnings</p>
+                <p className="mt-0.5 font-serif text-2xl leading-none text-brown">
+                  {formatCurrency(stallion.career_earnings)}
+                </p>
+              </div>
+            )}
+          </div>
         )}
 
         <div className="mt-6 border-t border-line pt-6">

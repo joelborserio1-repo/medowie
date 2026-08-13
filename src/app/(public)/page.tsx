@@ -34,16 +34,38 @@ export default async function HomePage() {
         videoEndSeconds={settings?.hero_video_end_seconds}
       />
 
-      {intro?.body && (
-        <section className="py-16 sm:py-24">
-          <div className="mx-auto grid w-full max-w-[1400px] gap-8 px-5 sm:px-8 md:grid-cols-[220px_1fr]">
-            <p className="eyebrow">{intro.heading ?? "Medowie Lodge"}</p>
-            <div className="max-w-2xl whitespace-pre-line text-[17px] leading-relaxed text-charcoal">
-              {intro.body}
+      <section className="py-16 sm:py-24">
+        <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
+          <div className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-start">
+            <div>
+              <p className="eyebrow mb-4">Welcome to Medowie Lodge</p>
+              {intro?.body ? (
+                <div className="max-w-2xl whitespace-pre-line text-[17px] leading-relaxed text-charcoal">
+                  {intro.body}
+                </div>
+              ) : (
+                <div className="max-w-2xl space-y-4 text-[17px] leading-relaxed text-charcoal">
+                  <p>
+                    Medowie Lodge is a dedicated Standardbred nursery in the Hunter Valley of New South
+                    Wales, standing a select group of quality stallions and preparing well-bred yearlings
+                    for the Australian sales each season.
+                  </p>
+                  <p>
+                    Our focus is deliberately narrow: sound conformation, proven performance pedigrees and
+                    horses raised with the individual attention that produces genuine racehorses. From
+                    service through to sale preparation, every horse is managed on the one property by
+                    people who breed and race them themselves.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="lg:sticky lg:top-24">
+              <FacebookFeed facebookUrl={settings?.facebook_url} variant="panel" />
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       <section className="border-t border-line py-16 sm:py-24">
         <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
@@ -115,18 +137,8 @@ export default async function HomePage() {
 
       <HorsesForSalePreview horses={horses} />
 
-      <section className="border-t border-line py-16 text-center sm:py-24">
-        <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
-          <p className="eyebrow mb-3">Bloodlines</p>
-          <h2 className="font-serif text-4xl leading-tight text-brown sm:text-5xl">
-            Breeding for performance.
-          </h2>
-        </div>
-      </section>
-
       <ResultsList results={results} />
       <NewsList articles={news} />
-      <FacebookFeed facebookUrl={settings?.facebook_url} />
     </>
   );
 }

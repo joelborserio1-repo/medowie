@@ -18,12 +18,20 @@ import {
   deleteVideo,
   addProgeny,
   deleteProgeny,
+  bulkImportProgeny,
   upsertPedigree,
 } from "../actions";
 
-export default async function EditStallionPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditStallionPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ import?: string }>;
+}) {
   await requireAdmin();
   const { id } = await params;
+  const { import: importResult } = await searchParams;
   const supabase = await createClient();
 
   const [{ data: stallion }, { data: highlights }, { data: eligibility }, { data: gallery }, { data: videos }, { data: documents }, { data: progeny }, { data: pedigree }] =
@@ -46,7 +54,15 @@ export default async function EditStallionPage({ params }: { params: Promise<{ i
   const addEligibilityAction = addEligibility.bind(null, id);
   const addVideoAction = addVideo.bind(null, id);
   const addProgenyAction = addProgeny.bind(null, id);
+  const bulkImportProgenyAction = bulkImportProgeny.bind(null, id);
   const savePedigreeAction = upsertPedigree.bind(null, id);
+
+  const importMessage =
+    importResult === "empty" || importResult === "none"
+      ? "No valid rows were found — check the data and try again."
+      : importResult && /^\d+$/.test(importResult)
+        ? `Imported ${importResult} progeny record${importResult === "1" ? "" : "s"}.`
+        : null;
 
   return (
     <div>
@@ -175,32 +191,77 @@ export default async function EditStallionPage({ params }: { params: Promise<{ i
 
       {/* Progeny */}
       <section className="mt-14 border-t border-line pt-8">
-        <h2 className="mb-4 font-serif text-xl text-brown">Progeny</h2>
-        <ul className="mb-4 divide-y divide-line border-y border-line">
+        <h2 className="mb-1 font-serif text-xl text-brown">Progeny</h2>
+        <p className="mb-4 text-sm text-grey">
+          {(progeny ?? []).length} record{(progeny ?? []).length === 1 ? "" : "s"} on file.
+        </p>
+
+        {importMessage && (
+          <p className="mb-6 rounded-brand border border-line bg-parchment px-4 py-3 text-sm text-charcoal">
+            {importMessage}
+          </p>
+        )}
+
+        {/* Bulk import from Excel */}
+        <div className="mb-8 rounded-brand border border-line bg-parchment p-5">
+          <h3 className="font-serif text-lg text-brown">Bulk Import from Spreadsheet</h3>
+          <p className="mt-1 text-sm text-grey">
+            Copy the rows straight out of Excel (or paste CSV) and drop them in below. Use this exact column
+            order — a header row is optional and skipped automatically:
+          </p>
+          <p className="mt-2 overflow-x-auto whitespace-nowrap rounded-brand border border-line bg-warm-white px-3 py-2 font-mono text-[11px] text-charcoal">
+            Name | Foaling Date | Dam | Broodmare Sire | Country of Birth | Sex | Lifetime Prizemoney | Best
+            Mile Rate | Lifetime Starts | Lifetime Wins
+          </p>
+          <form action={bulkImportProgenyAction} className="mt-4">
+            <TextArea
+              label="Paste rows"
+              name="rows"
+              rows={6}
+              placeholder={"Smooth Satin\t12/09/2019\tSilk Stockings\tArt Major\tAUS\tMare\t184300\t1:52.3\t41\t9"}
+            />
+            <div className="mt-3 flex flex-wrap items-center gap-6">
+              <Checkbox label="Replace all existing progeny for this stallion" name="mode" value="replace" />
+              <SubmitButton label="Import Progeny" />
+            </div>
+          </form>
+        </div>
+
+        {/* Existing progeny */}
+        <ul className="mb-6 divide-y divide-line border-y border-line">
           {(progeny ?? []).map((p) => (
             <li key={p.id} className="flex items-center justify-between gap-4 py-2 text-sm">
-              <span>
+              <span className="text-charcoal">
                 {p.name} {p.featured && <span className="text-orange">★</span>}
+                <span className="ml-2 text-xs text-grey">
+                  {[p.dam, p.mile_rate, p.wins ? `${p.wins} wins` : null].filter(Boolean).join(" · ")}
+                </span>
               </span>
               <form action={deleteProgeny.bind(null, id, p.id)}>
-                <button className="text-xs text-grey hover:text-orange-dark">Remove</button>
+                <button className="shrink-0 text-xs text-grey hover:text-orange-dark">Remove</button>
               </form>
             </li>
           ))}
+          {(progeny ?? []).length === 0 && (
+            <li className="py-3 text-sm text-grey">No progeny recorded yet.</li>
+          )}
         </ul>
+
+        {/* Add a single progeny */}
+        <h3 className="mb-3 font-serif text-lg text-brown">Add a Single Runner</h3>
         <form action={addProgenyAction} className="grid gap-3 sm:grid-cols-4">
           <Field label="Name" name="name" />
+          <Field label="Foaling Date" name="foaled_date" type="date" />
           <Field label="Sex" name="sex" />
-          <Field label="Foaled Year" name="foaled_year" type="number" />
+          <Field label="Country of Birth" name="country_of_birth" />
           <Field label="Dam" name="dam" />
-          <Field label="Damsire" name="damsire" />
-          <Field label="Mile Rate" name="mile_rate" />
-          <Field label="Wins" name="wins" type="number" />
-          <Field label="Earnings" name="earnings" type="number" step="0.01" />
-          <Field label="Image URL" name="image_url" className="sm:col-span-2" />
-          <Field label="Profile URL" name="profile_url" className="sm:col-span-2" />
-          <TextArea label="Notes" name="notes" className="sm:col-span-4" rows={2} />
-          <Checkbox label="Feature this progeny" name="featured" />
+          <Field label="Broodmare Sire" name="damsire" />
+          <Field label="Best Mile Rate" name="mile_rate" />
+          <Field label="Lifetime Prizemoney" name="earnings" type="number" step="0.01" />
+          <Field label="Lifetime Starts" name="starts" type="number" />
+          <Field label="Lifetime Wins" name="wins" type="number" />
+          <TextArea label="Description (optional)" name="description" className="sm:col-span-4" rows={2} />
+          <Checkbox label="Mark as notable progeny" name="featured" />
           <div className="sm:col-span-4">
             <SubmitButton label="Add Progeny" />
           </div>

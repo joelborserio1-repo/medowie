@@ -3,10 +3,9 @@ import { notFound } from "next/navigation";
 import { StallionHero } from "@/components/stallions/StallionHero";
 import { QuickStats } from "@/components/stallions/QuickStats";
 import { CareerHighlightsTable } from "@/components/stallions/CareerHighlightsTable";
-import { BreedingInformation } from "@/components/stallions/BreedingInformation";
 import { PedigreeTree } from "@/components/stallions/PedigreeTree";
 import { ProgenyList } from "@/components/stallions/ProgenyList";
-import { MediaGallery } from "@/components/stallions/MediaGallery";
+import { VideoReplays } from "@/components/stallions/VideoReplays";
 import { FormDocumentRow } from "@/components/site/FormDocumentRow";
 import { StallionEnquiryForm } from "@/components/forms/StallionEnquiryForm";
 import { getStallionDetail } from "@/lib/data/stallions";
@@ -39,7 +38,7 @@ export default async function StallionProfilePage({ params }: { params: Promise<
   const detail = await getStallionDetail(slug).catch(() => null);
   if (!detail || !["published", "archived"].includes(detail.stallion.status)) notFound();
 
-  const { stallion, highlights, eligibility, gallery, videos, documents, progeny, pedigree } = detail;
+  const { stallion, highlights, gallery, videos, documents, progeny, pedigree } = detail;
   const name = stallionDisplayName(stallion.name, stallion.country_suffix);
 
   const breadcrumbJsonLd = {
@@ -95,10 +94,10 @@ export default async function StallionProfilePage({ params }: { params: Promise<
         </section>
       )}
 
-      <CareerHighlightsTable highlights={highlights} />
-      <BreedingInformation stallion={stallion} eligibility={eligibility} />
       <PedigreeTree stallion={stallion} pedigree={pedigree} />
+      <CareerHighlightsTable highlights={highlights} stallion={stallion} />
       <ProgenyList progeny={progeny} />
+      <VideoReplays videos={videos} />
 
       {stallion.mating_information && (
         <section className="border-b border-line py-14">
@@ -119,8 +118,6 @@ export default async function StallionProfilePage({ params }: { params: Promise<
           </div>
         </section>
       )}
-
-      <MediaGallery gallery={[]} videos={videos} sectionId="videos" eyebrow="Replays" heading="Videos & Replays" />
 
       {documents.length > 0 && (
         <section id="forms" className="scroll-mt-24 border-b border-line py-14">

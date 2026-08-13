@@ -39,17 +39,25 @@ export function TextArea({
   defaultValue,
   rows = 5,
   className,
+  placeholder,
 }: {
   label: string;
   name: string;
   defaultValue?: string | null;
   rows?: number;
   className?: string;
+  placeholder?: string;
 }) {
   return (
     <label className={className}>
       <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-grey">{label}</span>
-      <textarea name={name} defaultValue={defaultValue ?? undefined} rows={rows} className={inputClasses} />
+      <textarea
+        name={name}
+        defaultValue={defaultValue ?? undefined}
+        rows={rows}
+        placeholder={placeholder}
+        className={inputClasses}
+      />
     </label>
   );
 }
@@ -86,15 +94,17 @@ export function Checkbox({
   name,
   defaultChecked,
   className,
+  value,
 }: {
   label: string;
   name: string;
   defaultChecked?: boolean;
   className?: string;
+  value?: string;
 }) {
   return (
     <label className={`flex items-center gap-2 text-sm text-charcoal ${className ?? ""}`}>
-      <input type="checkbox" name={name} defaultChecked={defaultChecked} className="h-4 w-4" />
+      <input type="checkbox" name={name} defaultChecked={defaultChecked} value={value} className="h-4 w-4" />
       {label}
     </label>
   );

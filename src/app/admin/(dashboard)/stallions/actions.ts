@@ -238,12 +238,16 @@ export async function addProgeny(stallionId: string, formData: FormData) {
       name,
       sex: str(formData, "sex"),
       foaled_year: int(formData, "foaled_year"),
+      foaled_date: str(formData, "foaled_date"),
+      country_of_birth: str(formData, "country_of_birth"),
       dam: str(formData, "dam"),
       damsire: str(formData, "damsire"),
       earnings: num(formData, "earnings"),
       mile_rate: str(formData, "mile_rate"),
+      starts: int(formData, "starts"),
       wins: int(formData, "wins"),
       notes: str(formData, "notes"),
+      description: str(formData, "description"),
       image_url: str(formData, "image_url"),
       profile_url: str(formData, "profile_url"),
       featured: formData.get("featured") === "on",
@@ -251,6 +255,102 @@ export async function addProgeny(stallionId: string, formData: FormData) {
   }
   revalidatePath(`/admin/stallions/${stallionId}`);
   revalidatePath("/admin/progeny");
+}
+
+/**
+ * Bulk-import progeny from spreadsheet data pasted as delimited rows.
+ * Expected column order (matching the supplied Excel export):
+ *   Name | Foaling Date | Dam | Broodmare Sire | Country of Birth | Sex |
+ *   Lifetime Prizemoney | Best Mile Rate | Lifetime Starts | Lifetime Wins
+ * Accepts tab-separated (direct Excel paste) or comma-separated values.
+ * A leading header row is detected and skipped automatically.
+ */
+export async function bulkImportProgeny(stallionId: string, formData: FormData) {
+  await requireAdmin();
+  const supabase = await createClient();
+
+  const raw = str(formData, "rows");
+  const mode = str(formData, "mode"); // "append" | "replace"
+  if (!raw) {
+    redirect(`/admin/stallions/${stallionId}?import=empty`);
+  }
+
+  const lines = raw
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0);
+
+  const splitRow = (line: string): string[] =>
+    (line.includes("\t") ? line.split("\t") : line.split(",")).map((c) => c.trim());
+
+  // Skip a header row if the first cell is non-numeric header text like "Name".
+  if (lines.length > 0) {
+    const first = splitRow(lines[0])[0]?.toLowerCase();
+    if (first === "name") lines.shift();
+  }
+
+  const toNum = (v: string | undefined): number | null => {
+    if (!v) return null;
+    const cleaned = v.replace(/[$,\s]/g, "");
+    if (cleaned === "") return null;
+    const n = Number(cleaned);
+    return Number.isFinite(n) ? n : null;
+  };
+  const toInt = (v: string | undefined): number | null => {
+    const n = toNum(v);
+    return n === null ? null : Math.trunc(n);
+  };
+  const toDate = (v: string | undefined): string | null => {
+    if (!v) return null;
+    const d = new Date(v);
+    if (Number.isNaN(d.getTime())) return null;
+    return d.toISOString().slice(0, 10);
+  };
+  const text = (v: string | undefined): string | null => {
+    const t = (v ?? "").trim();
+    return t === "" ? null : t;
+  };
+
+  const records = lines
+    .map((line, index) => {
+      const c = splitRow(line);
+      const name = text(c[0]);
+      if (!name) return null;
+      const foaledDate = toDate(c[1]);
+      return {
+        stallion_id: stallionId,
+        name,
+        foaled_date: foaledDate,
+        foaled_year: foaledDate ? new Date(foaledDate).getFullYear() : null,
+        dam: text(c[2]),
+        damsire: text(c[3]),
+        country_of_birth: text(c[4]),
+        sex: text(c[5]),
+        earnings: toNum(c[6]),
+        mile_rate: text(c[7]),
+        starts: toInt(c[8]),
+        wins: toInt(c[9]),
+        display_order: index,
+        featured: false,
+      };
+    })
+    .filter((r): r is NonNullable<typeof r> => r !== null);
+
+  if (records.length === 0) {
+    redirect(`/admin/stallions/${stallionId}?import=none`);
+  }
+
+  if (mode === "replace") {
+    await supabase.from("stallion_progeny").delete().eq("stallion_id", stallionId);
+  }
+
+  const { error } = await supabase.from("stallion_progeny").insert(records);
+  if (error) throw error;
+
+  revalidatePath(`/admin/stallions/${stallionId}`);
+  revalidatePath("/admin/progeny");
+  revalidatePath("/stallions");
+  redirect(`/admin/stallions/${stallionId}?import=${records.length}`);
 }
 
 export async function deleteProgeny(stallionId: string, id: string) {

@@ -15,7 +15,8 @@ export default async function AdminProgenyPage() {
     <div>
       <AdminPageHeader title="Progeny" />
       <p className="mb-6 max-w-xl text-sm text-grey">
-        Progeny are managed from each stallion&apos;s edit page, so entries stay attached to the correct sire.
+        Progeny are managed from each stallion&apos;s edit page — open a sire below to add records
+        individually or bulk-import a full list straight from your Excel spreadsheet.
       </p>
 
       <div className="overflow-x-auto border border-line bg-warm-white">
