@@ -28,24 +28,29 @@ export function ImageUrlField({
 
     setUploading(true);
     setError(null);
-    const supabase = createClient();
 
-    const cleanName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "-");
-    const path = folder ? `${folder}/${Date.now()}-${cleanName}` : `${Date.now()}-${cleanName}`;
+    try {
+      const supabase = createClient();
+      const cleanName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "-");
+      const path = folder ? `${folder}/${Date.now()}-${cleanName}` : `${Date.now()}-${cleanName}`;
 
-    const { error: uploadError } = await supabase.storage.from(bucket).upload(path, file, { upsert: false });
-    if (uploadError) {
-      setError(uploadError.message);
+      const { error: uploadError } = await supabase.storage.from(bucket).upload(path, file, { upsert: false });
+      if (uploadError) throw new Error(uploadError.message);
+
+      const { data: publicUrl } = supabase.storage.from(bucket).getPublicUrl(path);
+
+      const { error: insertError } = await supabase
+        .from("media_assets")
+        .insert({ bucket, path, url: publicUrl.publicUrl, folder: folder || null });
+      if (insertError) throw new Error(insertError.message);
+
+      setUrl(publicUrl.publicUrl);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed. Please try again.");
+    } finally {
       setUploading(false);
-      return;
+      e.target.value = "";
     }
-
-    const { data: publicUrl } = supabase.storage.from(bucket).getPublicUrl(path);
-    await supabase.from("media_assets").insert({ bucket, path, url: publicUrl.publicUrl, folder: folder || null });
-
-    setUrl(publicUrl.publicUrl);
-    setUploading(false);
-    e.target.value = "";
   }
 
   return (
@@ -60,11 +65,11 @@ export function ImageUrlField({
         className="w-full border border-line bg-warm-white px-3 py-2.5 text-sm text-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange"
       />
       <div className="mt-2 flex items-center gap-3 border border-dashed border-line bg-parchment px-3 py-2.5">
-        <label className="cursor-pointer rounded-[3px] bg-brown px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-warm-white hover:bg-charcoal">
-          Upload Image
+        <label className="cursor-pointer rounded-[3px] bg-orange px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-warm-white hover:bg-orange-dark">
+          {uploading ? "Uploading…" : "Upload Image"}
           <input type="file" accept="image/*" onChange={handleUpload} disabled={uploading} className="hidden" />
         </label>
-        <span className="text-xs text-grey">{uploading ? "Uploading…" : "or paste a URL above"}</span>
+        {!uploading && <span className="text-xs text-grey">or paste a URL above</span>}
       </div>
       {error && <p className="mt-1 text-xs text-orange-dark">{error}</p>}
       {url && (
