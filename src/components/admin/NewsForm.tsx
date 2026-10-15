@@ -1,4 +1,5 @@
 import { Field, TextArea, Select, SubmitButton } from "@/components/admin/FormField";
+import { ImageUrlField } from "@/components/admin/ImageUrlField";
 import { upsertNews } from "@/app/admin/(dashboard)/news/actions";
 import type { NewsArticle, Stallion, HorseForSale } from "@/lib/supabase/types";
 
@@ -45,7 +46,7 @@ export function NewsForm({
           options={[{ value: "", label: "None" }, ...horses.map((h) => ({ value: h.id, label: h.name }))]}
         />
       </div>
-      <Field label="Hero Image URL" name="hero_image_url" defaultValue={article?.hero_image_url} />
+      <ImageUrlField label="Hero Image URL" name="hero_image_url" defaultValue={article?.hero_image_url} bucket="news" />
       <TextArea label="Excerpt" name="excerpt" defaultValue={article?.excerpt} rows={2} />
       <TextArea label="Body" name="body" defaultValue={article?.body} rows={10} />
       <div className="grid gap-4 sm:grid-cols-2">
