@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { MediaUploader } from "@/components/admin/MediaUploader";
 import { CopyUrlButton } from "@/components/admin/CopyUrlButton";
+import type { MediaAsset } from "@/lib/supabase/types";
 import { deleteMediaAsset, updateMediaAlt } from "./actions";
 
 const PAGE_SIZE = 60;
@@ -20,14 +20,19 @@ export default async function AdminMediaPage({
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
-  const supabase = await createClient();
-  const { data: assets } = await supabase
-    .from("media_assets")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .range(from, to);
+  let results: MediaAsset[] = [];
+  try {
+    const supabase = await createClient();
+    const { data: assets } = await supabase
+      .from("media_assets")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    results = assets ?? [];
+  } catch {
+    // Supabase temporarily unreachable — render the page with no media rather than crashing.
+  }
 
-  const results = assets ?? [];
   const hasNextPage = results.length === PAGE_SIZE;
 
   return (
@@ -42,9 +47,10 @@ export default async function AdminMediaPage({
       <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-4">
         {results.map((asset) => (
           <div key={asset.id} className="border border-line bg-warm-white">
-            <div className="relative aspect-square bg-parchment">
+            <div className="relative aspect-square overflow-hidden bg-parchment">
               {asset.url.match(/\.(png|jpe?g|webp|gif)$/i) ? (
-                <Image src={asset.url} alt={asset.alt_text ?? ""} fill className="object-cover" unoptimized />
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={asset.url} alt={asset.alt_text ?? ""} className="absolute inset-0 h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full items-center justify-center text-xs text-grey">Document</div>
               )}
