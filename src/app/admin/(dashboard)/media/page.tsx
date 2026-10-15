@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -6,10 +7,28 @@ import { MediaUploader } from "@/components/admin/MediaUploader";
 import { CopyUrlButton } from "@/components/admin/CopyUrlButton";
 import { deleteMediaAsset, updateMediaAlt } from "./actions";
 
-export default async function AdminMediaPage() {
+const PAGE_SIZE = 60;
+
+export default async function AdminMediaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   await requireAdmin();
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam) || 1);
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
   const supabase = await createClient();
-  const { data: assets } = await supabase.from("media_assets").select("*").order("created_at", { ascending: false });
+  const { data: assets, count } = await supabase
+    .from("media_assets")
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  const total = count ?? 0;
+  const hasNextPage = to + 1 < total;
 
   return (
     <div>
@@ -17,6 +36,10 @@ export default async function AdminMediaPage() {
       <div className="mb-8">
         <MediaUploader />
       </div>
+
+      <p className="mb-4 text-xs text-grey">
+        {total === 0 ? "No media uploaded yet." : `Showing ${from + 1}–${Math.min(to + 1, total)} of ${total}.`}
+      </p>
 
       <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-4">
         {(assets ?? []).map((asset) => (
@@ -48,8 +71,24 @@ export default async function AdminMediaPage() {
             </div>
           </div>
         ))}
-        {(assets ?? []).length === 0 && <p className="text-sm text-grey">No media uploaded yet.</p>}
       </div>
+
+      {(page > 1 || hasNextPage) && (
+        <div className="mt-8 flex items-center justify-between">
+          {page > 1 ? (
+            <Link href={`/admin/media?page=${page - 1}`} className="text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline">
+              ← Newer
+            </Link>
+          ) : (
+            <span />
+          )}
+          {hasNextPage && (
+            <Link href={`/admin/media?page=${page + 1}`} className="text-xs font-semibold uppercase tracking-[0.1em] text-orange hover:underline">
+              Older →
+            </Link>
+          )}
+        </div>
+      )}
     </div>
   );
 }
