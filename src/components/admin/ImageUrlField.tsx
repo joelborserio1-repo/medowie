@@ -49,7 +49,7 @@ export function ImageUrlField({
   }
 
   return (
-    <label className={className}>
+    <div className={className}>
       <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-grey">{label}</span>
       <input
         type="text"
@@ -59,15 +59,18 @@ export function ImageUrlField({
         placeholder="Paste a URL, or upload a file below"
         className="w-full border border-line bg-warm-white px-3 py-2.5 text-sm text-charcoal focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange"
       />
-      <div className="mt-2 flex items-center gap-3">
-        <input type="file" accept="image/*" onChange={handleUpload} disabled={uploading} className="text-xs" />
-        {uploading && <span className="text-xs text-grey">Uploading…</span>}
+      <div className="mt-2 flex items-center gap-3 border border-dashed border-line bg-parchment px-3 py-2.5">
+        <label className="cursor-pointer rounded-[3px] bg-brown px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-warm-white hover:bg-charcoal">
+          Upload Image
+          <input type="file" accept="image/*" onChange={handleUpload} disabled={uploading} className="hidden" />
+        </label>
+        <span className="text-xs text-grey">{uploading ? "Uploading…" : "or paste a URL above"}</span>
       </div>
       {error && <p className="mt-1 text-xs text-orange-dark">{error}</p>}
       {url && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={url} alt="" className="mt-3 h-32 w-32 border border-line object-cover" />
       )}
-    </label>
+    </div>
   );
 }
