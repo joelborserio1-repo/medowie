@@ -33,5 +33,15 @@
 		// are set with `wrangler secret put <NAME>` instead — see
 		// docs/DEPLOYMENT.md.
 		"NEXT_PUBLIC_SITE_URL": "https://www.medowielodge.com.au"
+	},
+	// Enabled here (not just in the dashboard) so it survives every `wrangler deploy` —
+	// dashboard-only toggles get reset since this Worker's config source of truth is
+	// this file, read fresh on each git-triggered build/deploy.
+	"observability": {
+		"logs": {
+			"enabled": true,
+			"head_sampling_rate": 1,
+			"invocation_logs": true
+		}
 	}
 }
