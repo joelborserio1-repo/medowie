@@ -21,14 +21,14 @@ export default async function AdminMediaPage({
   const to = from + PAGE_SIZE - 1;
 
   const supabase = await createClient();
-  const { data: assets, count } = await supabase
+  const { data: assets } = await supabase
     .from("media_assets")
-    .select("*", { count: "exact" })
+    .select("*")
     .order("created_at", { ascending: false })
     .range(from, to);
 
-  const total = count ?? 0;
-  const hasNextPage = to + 1 < total;
+  const results = assets ?? [];
+  const hasNextPage = results.length === PAGE_SIZE;
 
   return (
     <div>
@@ -37,12 +37,10 @@ export default async function AdminMediaPage({
         <MediaUploader />
       </div>
 
-      <p className="mb-4 text-xs text-grey">
-        {total === 0 ? "No media uploaded yet." : `Showing ${from + 1}–${Math.min(to + 1, total)} of ${total}.`}
-      </p>
+      {results.length === 0 && page === 1 && <p className="mb-4 text-xs text-grey">No media uploaded yet.</p>}
 
       <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-4">
-        {(assets ?? []).map((asset) => (
+        {results.map((asset) => (
           <div key={asset.id} className="border border-line bg-warm-white">
             <div className="relative aspect-square bg-parchment">
               {asset.url.match(/\.(png|jpe?g|webp|gif)$/i) ? (
