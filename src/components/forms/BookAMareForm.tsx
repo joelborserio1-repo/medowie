@@ -52,6 +52,7 @@ export function BookAMareForm({ stallions }: { stallions: Pick<Stallion, "id" | 
           ))}
         </SelectField>
 
+        <TextField label="Name" required register={register("name")} error={errors.name} />
         <TextField label="Mare Name" required register={register("mareName")} error={errors.mareName} />
         <TextField label="Mare Age" register={register("mareAge")} error={errors.mareAge} />
         <TextField label="Sire" register={register("mareSire")} error={errors.mareSire} />
